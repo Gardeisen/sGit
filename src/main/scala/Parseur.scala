@@ -39,10 +39,9 @@ object Parseur extends App {
     case Some(config) =>
       config.mode match {
         case "init" =>
-          println("on test le parseur ")
-      }
-    case _ =>
-    // argum
+          println("on test le init  "+ Init.init())
 
+        case _ =>
+      }
   }
 }

@@ -1,2 +1,7 @@
 [debug] Acquiring lock on file C:\Users\Marine_2\IdeaProjects\sGit\project\target\.sbt-compilation-infos\sgit-compile\.sbt-idea-lock ...
+[warn] C:\Users\Marine_2\IdeaProjects\sGit\src\main\scala\Parseur.scala:38:16: match may not be exhaustive.
+[warn] It would fail on the following input: None
+[warn]   OParser.parse(parser1, args, Config()) match {
+[warn]                ^
+[warn] one warning found
 [debug] Releasing lock on file C:\Users\Marine_2\IdeaProjects\sGit\project\target\.sbt-compilation-infos\sgit-compile\.sbt-idea-lock.
