@@ -1,0 +1,51 @@
+[debug] Full compilation, no sources in previous analysis.
+[debug] All sources are invalidated.
+[debug] Initial set of included nodes: 
+[debug] Recompiling all sources: number of invalidated sources > 50.0% of all sources
+[info] Compiling 1 Scala source to C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes ...
+[debug] Getting org.scala-sbt:compiler-bridge_2.13:1.3.0:compile for Scala 2.13.1
+[info] Non-compiled module 'compiler-bridge_2.13' for Scala 2.13.1. Compiling...
+[debug] Creating plain compiler interface for 2.13.1.
+[debug]   > Arguments: 
+[debug] 	-nowarn
+[debug] 	-d
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_7f69ea8f
+[debug] 	-bootclasspath
+[debug] 	C:\Program Files\Java\jdk1.8.0_151\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_151\jre\classes;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.1\scala-library-2.13.1.jar
+[debug] 	-classpath
+[debug] 	C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\google\protobuf\protobuf-java\3.7.0\protobuf-java-3.7.0.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-sbt\util-interface\1.3.0\util-interface-1.3.0.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-sbt\compiler-interface\1.3.0\compiler-interface-1.3.0.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-sbt\compiler-bridge_2.13\1.3.0\compiler-bridge_2.13-1.3.0-sources.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-compiler\2.13.1\scala-compiler-2.13.1.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-reflect\2.13.1\scala-reflect-2.13.1.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\jline\jline\2.14.6\jline-2.14.6.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\fusesource\jansi\jansi\1.12\jansi-1.12.jar
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\API.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Analyzer.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\CallbackGlobal.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\ClassName.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Command.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Compat.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\CompilerInterface.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\ConsoleInterface.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\DelegatingReporter.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Dependency.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\ExtractAPI.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\ExtractUsedNames.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\GlobalHelpers.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\InteractiveConsoleFactory.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\InteractiveConsoleHelper.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\InteractiveConsoleInterface.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\InteractiveConsoleResponse.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\JarUtils.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\JavaUtils.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\LocalToNonLocalClass.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\LocateClassFile.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Log.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\Message.scala
+[debug] 	C:\Users\Marine_2\AppData\Local\Temp\sbt_92bdf453\xsbt\ScaladocInterface.scala
+[debug]       
+[info]   Compilation completed in 64.477s.
+[debug] Getting org.scala-sbt:compiler-bridge_2.13:1.3.0:compile for Scala 2.13.1
+[debug] [zinc] Running cached compiler 263a6ed9 for Scala compiler version 2.13.1
+[debug] [zinc] The Scala compiler is invoked with:
+[debug] 	-bootclasspath
+[debug] 	C:\Program Files\Java\jdk1.8.0_151\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_151\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_151\jre\classes;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.1\scala-library-2.13.1.jar
+[debug] 	-classpath
+[debug] 	C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-reflect\2.13.1\scala-reflect-2.13.1.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scalactic\scalactic_2.13\3.0.8\scalactic_2.13-3.0.8.jar;C:\Users\Marine_2\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\github\scopt\scopt_2.13\4.0.0-RC2\scopt_2.13-4.0.0-RC2.jar
+[debug] Scala compilation took 72.867606509 s
+[info] Done compiling.

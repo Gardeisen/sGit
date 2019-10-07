@@ -1,0 +1,15 @@
+[debug] Packaging C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\sgit_2.13-0.1.jar ...
+[debug] Input file mappings:
+[debug] 	
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes
+[debug] 	Config$.class
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes\Config$.class
+[debug] 	Config.class
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes\Config.class
+[debug] 	Parseur$.class
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes\Parseur$.class
+[debug] 	Parseur$delayedInit$body.class
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes\Parseur$delayedInit$body.class
+[debug] 	Parseur.class
+[debug] 	  C:\Users\Marine_2\IdeaProjects\sGit\target\scala-2.13\classes\Parseur.class
+[debug] Done packaging.
