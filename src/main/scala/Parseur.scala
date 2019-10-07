@@ -42,6 +42,7 @@ object Parseur extends App {
           println("on test le init  "+ Init.init())
 
         case _ =>
+          println("there's no command like this, try again")
       }
   }
 }

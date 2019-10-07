@@ -8,7 +8,7 @@ object Init {
     //else create :
 
          // folder .sgit/
-    new java.io.File(System.getProperty("user.dir")+"/.sgit").mkdirs
+    new java.io.File(System.getProperty("user.dir")+"/.sgit").mkdir()
 
          //folder .sgit/objects System.getProperty("user.dir")
 
