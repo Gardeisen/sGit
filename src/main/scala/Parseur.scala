@@ -39,7 +39,7 @@ object Parseur extends App {
     case Some(config) =>
       config.mode match {
         case "init" =>
-          println("on test le init  "+ Init.init())
+          println(Init.init())
 
         case _ =>
           println("there's no command like this, try again")
