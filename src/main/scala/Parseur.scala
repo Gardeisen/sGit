@@ -52,9 +52,8 @@ object Parseur extends App {
 
         case "add" =>
           Add.add(config.files)
-          "add tous les fichiers"
 
-        case "add" => //pour
+       // case "add" => //pour tous les fichier add .
 
         case _ =>
           println("there's no command like this, try again")
