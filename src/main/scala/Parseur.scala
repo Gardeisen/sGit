@@ -1,6 +1,7 @@
 import java.io.File
 
 import scopt.OParser
+
 case class Config(
                    foo: Int = -1,
                    out: File = new File("."),
@@ -16,7 +17,6 @@ case class Config(
                    kwargs: Map[String, String] = Map())
 
 
-
 object Parseur extends App {
 
   val builder = OParser.builder[Config]
@@ -28,10 +28,19 @@ object Parseur extends App {
 
       cmd("init")
         .action((_, c) => c.copy(mode = "init"))
-        .text("create sgit repository.")
+        .text("create sgit empty repository."),
+
+      cmd(name = "add")
+        .action((_, c) => c.copy(mode = "add"))
+          .text("add files to the INDEX")
+          .children(arg[File]("<file>...")
+            .required()
+            .unbounded()
+            .action((x, c) => c.copy(files = c.files :+ x))
+            .text("file to add to INDEX")),
 
 
-    )
+        )
   }
 
   // OParser.parse returns Option[Config]
@@ -40,6 +49,12 @@ object Parseur extends App {
       config.mode match {
         case "init" =>
           println(Init.init())
+
+        case "add" =>
+          Add.add(config.files)
+          "add tous les fichiers"
+
+        case "add" => //pour
 
         case _ =>
           println("there's no command like this, try again")
