@@ -19,7 +19,7 @@ object Add {
   }
 
   def writeInAFile(file: File, content: String) {
-    val fileWriter = new FileWriter(file, false)
+    val fileWriter = new FileWriter(file, true)
     fileWriter.write(content)
     fileWriter.close()
   }
@@ -40,11 +40,14 @@ object Add {
     blob
   }
 
-  def addOneFile(file : File): String = {
+  def addOneFile(file : File) {
     if (file.exists()){
       // create blob
       createBlob(file)
       //get the INDEX or create it
+
+      //WARNING : ON ECRASE INDEX A CHAQUE FOIS A CAUSE DE L DESSUS
+
       val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
       if (!INDEX.exists()) {
         INDEX.createNewFile()
@@ -56,16 +59,22 @@ object Add {
 
       //write the line in the INDEX
       writeInAFile(INDEX, filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
-
-      "file added successfully"
     }
     else {
-      "file unknown"
+      println(file.getName+ "  : file unknown")
     }
 
   }
 
-  def add(files: Seq[File]) { files.foreach(file => addOneFile(file)) }
+  def add(files: Seq[File]) : String = {
+
+    if (files.nonEmpty){
+      //FAIRE UNE FONCTION POUR VOIR SI C'EST UN POINT + FONCTION
+      addOneFile(files.head)
+      add(files.tail)
+    }
+  "the files have been added successfully"
+  }
 
 
 }
