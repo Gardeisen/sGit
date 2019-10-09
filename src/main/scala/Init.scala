@@ -1,4 +1,5 @@
-import java.io.{File, FileWriter}
+import java.io.{File}
+import Add.writeInAFile
 
 object Init {
 
@@ -18,16 +19,16 @@ object Init {
       new File(System.getProperty("user.dir") + "/.sgit/tags").mkdir()
 
       //file HEAD, refs/branch/master
-      val head = new FileWriter(System.getProperty("user.dir") + "/.sgit/HEAD", false)
-      head.write("branches/master")
-      head.close()
+      val head = new File(System.getProperty("user.dir") + "/.sgit/HEAD")
+      head.createNewFile()
+      //write content
+      writeInAFile(head,"branches/master")
       ".sgit initialized"
     }
     // if it already exist -> "the folder already exist"
     else {
       "the repository already exist"
     }
-    //else create :
 
   }
 }

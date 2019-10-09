@@ -1,9 +1,7 @@
 import java.io.{File, FileWriter}
 import java.math.BigInteger
 import java.security.MessageDigest
-
 import scala.io.Source
-
 
 object Add {
 
@@ -16,52 +14,52 @@ object Add {
 
   }
 
+  def getContent(file: File): String = {
+    Source.fromFile(file).mkString
+  }
+
+  def writeInAFile(file: File, content: String) {
+    val fileWriter = new FileWriter(file, false)
+    fileWriter.write(content)
+    fileWriter.close()
+  }
+
+
   def createBlob(file: File): File = {
 
     // get content
-    val content = Source.fromFile(file).mkString
+    val content = getContent(file)
     //transform content into sha
     val sha = sha1Transformation(content)
     //create File path + /object/hash
     val blob = new File(System.getProperty("user.dir") + "/.sgit/objects/" + sha)
     blob.createNewFile()
     //write content
-    val fileWriter = new FileWriter(blob,false)
-    fileWriter.write(content)
-    fileWriter.close()
+    writeInAFile(blob, content)
     //send file
     blob
   }
 
-  def add(files: Seq[File]): String = {
+  def add(files: Seq[File]) {
 
-    // pour tous les fichiers
+    for (file <- files) {
+      // create blob
+      createBlob(file)
+      //get the INDEX or create it
+      val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
+      if (!INDEX.exists()) {
+        INDEX.createNewFile()
+      }
+      //get the different directory
+      val dirPath = System.getProperty("user.dir")
+      val filePath = file.getPath
+      val filePathFromDir = filePath.replace(dirPath, "")
 
-          // creer le blob
-    createBlob(files.head)
-          // ajouter le blob a object OK fais dans create blob
-          // creer le fichier index s'il existe pas et mettre nom blob + path blob
-    //attention cas où Index existe deja
+      //write the line in the INDEX
+      writeInAFile(INDEX, filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
 
-    val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
-
-    if (!INDEX.exists()) {
-      INDEX.createNewFile()
     }
-
-   val fileWriter = new FileWriter(INDEX,true)
-
-    val dirPath = System.getProperty("user.dir")
-    val filePath = files.head.getPath
-    val filePathFromDir = filePath.replace(dirPath,"")
-
-    val content = Source.fromFile(files.head).mkString
-
-    fileWriter.write(filePathFromDir+" "+ sha1Transformation(content) +"\n")
-    fileWriter.close()
-
-    //
-    "files add OK"
+    //WARNING CASE BLOB ALREADY EXIST ISN'T HANDLE
   }
 
 }
