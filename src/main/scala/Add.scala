@@ -40,9 +40,8 @@ object Add {
     blob
   }
 
-  def add(files: Seq[File]) {
-
-    for (file <- files) {
+  def addOneFile(file : File): String = {
+    if (file.exists()){
       // create blob
       createBlob(file)
       //get the INDEX or create it
@@ -58,8 +57,15 @@ object Add {
       //write the line in the INDEX
       writeInAFile(INDEX, filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
 
+      "file added successfully"
     }
-    //WARNING CASE BLOB ALREADY EXIST ISN'T HANDLE
+    else {
+      "file unknown"
+    }
+
   }
+
+  def add(files: Seq[File]) { files.foreach(file => addOneFile(file)) }
+
 
 }
