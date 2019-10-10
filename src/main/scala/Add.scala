@@ -46,8 +46,6 @@ object Add {
       createBlob(file)
       //get the INDEX or create it
 
-      //WARNING : ON ECRASE INDEX A CHAQUE FOIS A CAUSE DE L DESSUS
-
       val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
       if (!INDEX.exists()) {
         INDEX.createNewFile()
@@ -57,8 +55,19 @@ object Add {
       val filePath = file.getPath
       val filePathFromDir = filePath.replace(dirPath, "")
 
-      //write the line in the INDEX
-      writeInAFile(INDEX, filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
+      //Case where it's a file which have been modified
+      if(getContent(INDEX).contains(filePathFromDir)){
+        val newIndexList = getContent(INDEX).split("\n").filter(newIndexList => !newIndexList.contains(filePathFromDir))
+        val newIndex = newIndexList.mkString("\n")
+        val fileWriter = new FileWriter(INDEX, false)
+        fileWriter.write(newIndex+ "\n"+ filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
+        fileWriter.close()
+      }
+      else {
+        //write the line in the INDEX
+        writeInAFile(INDEX, filePathFromDir + " " + sha1Transformation(getContent(file)) + "\n")
+      }
+
     }
     else {
       println(file.getName+ "  : file unknown")
@@ -69,7 +78,7 @@ object Add {
   def add(files: Seq[File]) : String = {
 
     if (files.nonEmpty){
-      //FAIRE UNE FONCTION POUR VOIR SI C'EST UN POINT + FONCTION
+      //FAIRE UNE FONCTION POUR VOIR SI C'EST UN POINT + FONCTION ???
       addOneFile(files.head)
       add(files.tail)
     }
