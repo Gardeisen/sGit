@@ -32,15 +32,19 @@ object Parseur extends App {
 
       cmd(name = "add")
         .action((_, c) => c.copy(mode = "add"))
-          .text("add files to the INDEX")
-          .children(arg[File]("<file>...")
-            .required()
-            .unbounded()
-            .action((x, c) => c.copy(files = c.files :+ x))
-            .text("file to add to INDEX")),
+        .text("add files to the INDEX")
+        .children(arg[File]("<file>...")
+          .required()
+          .unbounded()
+          .action((x, c) => c.copy(files = c.files :+ x))
+          .text("file to add to INDEX")),
+
+      cmd(name = "commit")
+        .action((_, c) => c.copy(mode = "commit"))
+        .text("commit files"),
 
 
-        )
+    )
   }
 
   // OParser.parse returns Option[Config]
@@ -48,12 +52,17 @@ object Parseur extends App {
     case Some(config) =>
       config.mode match {
         case "init" =>
-          println(Init.init())
+          Init.init()
 
         case "add" =>
           Add.add(config.files)
 
-       // case "add" => //pour tous les fichier add .
+        // case "add" => //pour tous les fichier add .
+        //to do
+
+
+        case "commit" =>
+          Commit.commit()
 
         case _ =>
           println("there's no command like this, try again")
