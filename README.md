@@ -1,1 +1,1 @@
-# sGitt
+# sGit
