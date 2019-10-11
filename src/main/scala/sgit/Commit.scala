@@ -2,7 +2,7 @@ package sgit
 
 import java.io.File
 
-import sgit.Add.getContent
+import sgit.Add.{getContent, writeInAFile}
 
 import scala.annotation.tailrec
 
@@ -38,12 +38,56 @@ object Commit {
     }
   }
 
+  def createTree(children: Array[String], pathToWrite: String): File = {
+    val content = children.mkString("\n")
+    val tree = new File(pathToWrite + Add.sha1Transformation(content))
+    tree.createNewFile()
+    writeInAFile(tree, content)
+    tree
+  }
+
+  def createTreesForAllTheIndex(mapIndex: Map[String, String], listTabPath: Array[Array[String]], deepLength: Int,
+                                mapParent: Map[String, Array[String]] = Map.empty[String, Array[String]],
+                                pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): File = {
+    //Step 0 : case stop
+    if (deepLength == 1) {
+      val stepOne = listTabPath.map(e => e.head).distinct
+      var newMap = Map.empty[String, Array[String]]
+      stepOne.foreach(
+        e =>
+          if (mapIndex.contains(e)) {
+            newMap = newMap + ("" -> Array("blob " + mapIndex.apply(e) + " " + e))
+          }
+          else {
+            val name = createTree(mapParent.apply(e), pathToWrite).getName
+            newMap = newMap + ("" -> Array("tree " + name + " " + e))
+          }
+      )
+      createTree(newMap.apply(""), pathToWrite)
+    }
+    else {
+
+      val newMapParent  = listTabPath
+        .filter(e=> e.length==deepLength)
+        //.map(e=> Array(e.apply(deepLength - 2),e.apply(deepLength -1)))
+        .groupBy(e => e.apply(0))
+          .toMap(e =>)
+
+      newMapParent.foreach(
+        e => createTree(e.apply(1),pathToWrite)
+      )
+
+    }
+
+  }
+
   def commit(): Unit = {
 
     val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
     //TO DO
     println("la longueur max =    ")
     print(deepLengthMax(createTableOfPath(INDEX)))
+    //val deepLength = deepLengthMax(listTabPath) pour lancer createTreeOfIndex
 
     /*for ( e <- splitStepTwo) {
       println(" [ \""+e._1+"\" : \""+e._2+"\" ]")
