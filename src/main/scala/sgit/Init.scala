@@ -1,5 +1,8 @@
-import java.io.{File}
-import Add.writeInAFile
+package sgit
+
+import java.io.File
+
+import sgit.Add.writeInAFile
 
 object Init {
 
@@ -11,6 +14,9 @@ object Init {
       new File(System.getProperty("user.dir") + "/.sgit").mkdir()
       //folder .sgit/objects
       new File(System.getProperty("user.dir") + "/.sgit/objects").mkdir()
+      new File(System.getProperty("user.dir") + "/.sgit/objects/blob").mkdir()
+      new File(System.getProperty("user.dir") + "/.sgit/objects/tree").mkdir()
+      new File(System.getProperty("user.dir") + "/.sgit/objects/commit").mkdir()
       //folder .sgit/logs : create later with first commit
       //new File(System.getProperty("user.dir") + "/.sgit/logs").mkdir()
       //folder .sgit/branches

@@ -1,6 +1,7 @@
 import java.io.File
 
 import scopt.OParser
+import sgit.{Add, Commit, Init}
 
 case class Config(
                    foo: Int = -1,

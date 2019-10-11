@@ -1,6 +1,9 @@
+package sgit
+
 import java.io.{File, FileWriter}
 import java.math.BigInteger
 import java.security.MessageDigest
+
 import scala.io.Source
 
 object Add {
@@ -32,7 +35,7 @@ object Add {
     //transform content into sha
     val sha = sha1Transformation(content)
     //create File path + /object/hash
-    val blob = new File(System.getProperty("user.dir") + "/.sgit/objects/" + sha)
+    val blob = new File(System.getProperty("user.dir") + "/.sgit/objects/blobs" + sha)
     blob.createNewFile()
     //write content
     writeInAFile(blob, content)
