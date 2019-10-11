@@ -36,15 +36,14 @@ object Commit {
         deepLengthMax(tab.tail, length)
       }
     }
-
-
   }
 
   def commit(): Unit = {
 
     val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
     //TO DO
-
+    println("la longueur max =    ")
+    print(deepLengthMax(createTableOfPath(INDEX)))
 
     /*for ( e <- splitStepTwo) {
       println(" [ \""+e._1+"\" : \""+e._2+"\" ]")
