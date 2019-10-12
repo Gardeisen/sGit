@@ -29,8 +29,8 @@ object Commit {
       length
     }
     else {
-      if (tab.head.size > length) {
-        deepLengthMax(tab.tail, tab.head.size)
+      if (tab.head.length > length) {
+        deepLengthMax(tab.tail, tab.head.length)
       }
       else {
         deepLengthMax(tab.tail, length)
@@ -48,7 +48,7 @@ object Commit {
 
   def createTreesForAllTheIndex(mapIndex: Map[String, String], listTabPath: Array[Array[String]], deepLength: Int,
                                 mapParent: Map[String, Array[String]] = Map.empty[String, Array[String]],
-                                pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): File = {
+                                pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): Unit = {
     //Step 0 : case stop
     if (deepLength == 1) {
       val stepOne = listTabPath.map(e => e.head).distinct
@@ -63,18 +63,19 @@ object Commit {
             newMap = newMap + ("" -> Array("tree " + name + " " + e))
           }
       )
+      //attention regarder si on a bien pris le bon path ???
       createTree(newMap.apply(""), pathToWrite)
     }
     else {
 
       val newMapParent  = listTabPath
         .filter(e=> e.length==deepLength)
-        //.map(e=> Array(e.apply(deepLength - 2),e.apply(deepLength -1)))
+        .map(e=> Array(e.apply(deepLength - 2),e.apply(deepLength -1)))
         .groupBy(e => e.apply(0))
-          .toMap(e =>)
 
+      //pas sur voir ce que ca fait
       newMapParent.foreach(
-        e => createTree(e.apply(1),pathToWrite)
+        e => createTree(e._2.apply(0),pathToWrite)
       )
 
     }
