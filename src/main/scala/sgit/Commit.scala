@@ -2,7 +2,7 @@ package sgit
 
 import java.io.File
 
-import sgit.Add.{getContent, writeInAFile}
+import sgit.UtilityGit._
 
 import scala.annotation.tailrec
 
@@ -40,7 +40,7 @@ object Commit {
 
   def createTree(children: Array[String], pathToWrite: String): File = {
     val content = children.mkString("\n")
-    val tree = new File(pathToWrite + Add.sha1Transformation(content))
+    val tree = new File(pathToWrite + sha1Transformation(content))
     tree.createNewFile()
     writeInAFile(tree, content)
     tree

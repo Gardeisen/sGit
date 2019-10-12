@@ -3,7 +3,7 @@ package sgit
 import java.io.File
 
 import org.scalatest._
-import sgit.Add.writeInAFile
+import sgit.UtilityGit._
 
 //TESTS FOR THE FUNCTION OF TRANSFORMATION
 class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
@@ -55,7 +55,7 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   describe("???"){
     describe("????"){
       //it("")
-      //TO DO 
+      //TO DO
     }
   }
 
