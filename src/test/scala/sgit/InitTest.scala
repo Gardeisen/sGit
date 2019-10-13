@@ -1,12 +1,16 @@
 package sgit
 
 import java.io.File
-
+import sgit.UtilityGit._
 import org.scalatest.{BeforeAndAfter, FunSpec, GivenWhenThen, Matchers}
 
 import scala.reflect.io.Directory
 
 class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
+
+  before {
+    Init.init()
+  }
 
   after {
     new Directory(new File(System.getProperty("user.dir")+"/.sgit")).deleteRecursively()
@@ -15,7 +19,6 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
   //TESTS FOR THE INIT
   describe("When I run the init command") {
 
-    Init.init()
     val path = System.getProperty("user.dir")
 
     it("Should create a file HEAD") {
@@ -23,27 +26,51 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
       head.exists() shouldBe true
     }
     it("HEAD Should contains branches/master") {
-
+      val head = new File(path + "/.sgit/HEAD")
+      getContent(head) shouldBe "branches/master"
     }
 
-    //it("Should create a folder .sgit"){}
+    it("Should create a folder .sgit"){
+      val repo = new File(path + "/.sgit")
+      repo.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/objects"){}
+    it("Should create a folder .sgit/objects"){
+      val objects = new File(path + "/.sgit/objects")
+      objects.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/branches"){}
+    it("Should create a folder .sgit/branches"){
+      val branches = new File(path + ".sgit/branches")
+      branches.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/tags"){}
+    it("Should create a folder .sgit/tags"){
+      val tags = new File(path+ ".sgit/tags")
+      tags.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/objects/blob"){}
+    it("Should create a folder .sgit/objects/blob"){
+      val blob = new File(path + ".sgit/objects/blob")
+      blob.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/objects/tree"){}
+    it("Should create a folder .sgit/objects/tree"){
+      val tree = new File(path + ".sgit/objects/tree")
+      tree.exists() shouldBe true
+    }
 
-    //it("Should create a folder .sgit/branches"){}
+    it("Should not be true if a repo already exist"){
+      Init.init()
+      val repo = new File(path + "/.sgit")
+      repo.exists() shouldBe false
 
-    //it("Should print already initialized if a repo already exist"){}
-
-    // WARNING : delete all after !
-
+    }
   }
+
+
+
+
+
 
 }
