@@ -4,6 +4,12 @@ import java.io.{File, FileWriter}
 import sgit.UtilityGit._
 object Add {
 
+  /**
+   *
+   * Function create blob
+   * @param file : the file you want to add after
+   * @return a file, which is the blob of the file you want to add
+   */
   def createBlob(file: File): File = {
 
     // get content
@@ -19,7 +25,12 @@ object Add {
     blob
   }
 
-  def addOneFile(file : File) {
+  /**
+   * function addOneFile, add only one file
+   * @param file : the file you want to add
+   * The aim is to add the file to the index and to create a blob
+   */
+  def addOneFile(file : File) : Unit  ={
     if (file.exists()){
       // create blob
       createBlob(file)
@@ -54,14 +65,19 @@ object Add {
 
   }
 
-  def add(files: Seq[File]) : String = {
+  /**
+   * function add for all files
+   * @param files : a list of files you want to add
+   * Execute the function addOneFile for list
+   */
+  def add(files: Seq[File]) : Unit = {
 
     if (files.nonEmpty){
       //FAIRE UNE FONCTION POUR VOIR SI C'EST UN POINT + FONCTION ???
       addOneFile(files.head)
       add(files.tail)
     }
-  "the files have been added successfully"
+  println("the files have been added successfully")
   }
 
 

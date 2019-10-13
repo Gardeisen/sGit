@@ -7,10 +7,9 @@ import sgit.UtilityGit._
 object Init {
 
   /**
-   *
-   * @return
+   * Function Init, the aims is to create all the repository
    */
-  def init(): String = {
+  def init(): Unit = {
     //check if the folder .sgit already exist
 
     if (!new File(System.getProperty("user.dir") + "/.sgit").exists()) {
@@ -33,11 +32,11 @@ object Init {
       head.createNewFile()
       //write content
       writeInAFile(head,"branches/master")
-      ".sgit initialized"
+      println(".sgit initialized")
     }
     // if it already exist -> "the folder already exist"
     else {
-      "the repository already exist"
+      println("the repository already exist")
     }
 
   }

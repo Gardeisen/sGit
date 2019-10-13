@@ -8,7 +8,11 @@ import scala.annotation.tailrec
 
 object Commit {
 
-
+  /**
+   * function createTableOfPath, function to simplify the rest of the function commit
+   * @param file : the file you want to separate into a table of words
+   * @return a matrix contains the file but one word for each cell
+   */
   def createTableOfPath(file: File): Array[Array[String]] = {
     val content = getContent(file)
     val split = content.split("[\n, ]")
@@ -16,6 +20,11 @@ object Commit {
     splitStepTwo.map(e => e.split("""(\\)"""))
   }
 
+  /**
+   * function createMapIndex, is a utility function to create parameters for the createTree function
+   * @param file : the file you want to transform into a Map
+   * @return a Map which correspond to the file mapped
+   */
   def createMapIndex(file: File): Map[String, String] = {
 
     val content = getContent(file)
@@ -23,6 +32,12 @@ object Commit {
     split.map(e => (e.split(" ").apply(0), e.split(" ").apply(1))).toMap
   }
 
+  /**
+   * Function deepLengthMax, calcul the length max of a list of list
+   * @param tab : the list of list you want to know the max length
+   * @param length : use to store the result for the recursion
+   * @return the length maximum of the tab
+   */
   @tailrec
   def deepLengthMax(tab: Array[Array[String]], length: Int = 0): Int = {
     if (tab.isEmpty) {
@@ -38,6 +53,12 @@ object Commit {
     }
   }
 
+  /**
+   * Function createTree
+   * @param children : the list of under file that are liked
+   * @param pathToWrite : the path you want to write the tree
+   * @return a file which is the tree build
+   */
   def createTree(children: Array[String], pathToWrite: String): File = {
     val content = children.mkString("\n")
     val tree = new File(pathToWrite + sha1Transformation(content))
@@ -46,6 +67,15 @@ object Commit {
     tree
   }
 
+  /**
+   * WIP
+   *
+   * @param mapIndex
+   * @param listTabPath
+   * @param deepLength
+   * @param mapParent
+   * @param pathToWrite
+   */
   def createTreesForAllTheIndex(mapIndex: Map[String, String], listTabPath: Array[Array[String]], deepLength: Int,
                                 mapParent: Map[String, Array[String]] = Map.empty[String, Array[String]],
                                 pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): Unit = {
@@ -82,6 +112,9 @@ object Commit {
 
   }
 
+  /**
+   * WIP.....
+   */
   def commit(): Unit = {
 
     val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
