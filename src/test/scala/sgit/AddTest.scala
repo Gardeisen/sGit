@@ -6,7 +6,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
 
 
   describe("Given a file test.md to add") {
-    //create the file test
+    //create the file test and the sgit repo AFTER
 
     describe("Run the function blob"){
       //it("Should create a file name 'test.md content hash' "){}
