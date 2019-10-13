@@ -1,10 +1,8 @@
 package sgit
 
-import java.io.{File, FileWriter}
+import java.io.{BufferedReader, File, FileReader, FileWriter}
 import java.math.BigInteger
 import java.security.MessageDigest
-
-import scala.io.Source
 
 object UtilityGit {
 
@@ -28,7 +26,18 @@ object UtilityGit {
    * @return a String correspond to the content
    */
   def getContent(file: File): String = {
-    Source.fromFile(file).mkString
+      @scala.annotation.tailrec
+      def apply(bufferedReader: BufferedReader, content:String):String= {
+        val line = bufferedReader.readLine()
+        if (line == null) content
+        else apply(bufferedReader, content.concat(line + "\n"))
+      }
+      val file_reader = new FileReader(file)
+      val buffered_reader = new BufferedReader(file_reader)
+      val result = apply(buffered_reader,"")
+      buffered_reader.close()
+      file_reader.close()
+      result
   }
 
   /**

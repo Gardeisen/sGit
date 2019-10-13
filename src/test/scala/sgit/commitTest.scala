@@ -20,10 +20,10 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
 
   describe("Given a File, looks like the Index") {
 
-    val INDEX = new File(System.getProperty("user.dir") + "/src/test/scala/sgit/indexTest")
-    val content = "README.md 564z16z328fe42fz6 \n src/main/scala/sgit/Add.scala ferg555zz5fr95vz64f869er8z"
-    INDEX.createNewFile()
-    writeInAFile(INDEX, content)
+    //val INDEX = new File(System.getProperty("user.dir") + "/src/test/scala/sgit/indexTest")
+    //val content = "README.md 564z16z328fe42fz6 \n src/main/scala/sgit/Add.scala ferg555zz5fr95vz64f869er8z"
+    //INDEX.createNewFile()
+    //writeInAFile(INDEX, content)
 
     //TESTS FOR "createTableOfPath" function
     describe("I want to get the table of path associate ie: for one cell get a word of the path") {
@@ -48,7 +48,7 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
     }
 
     //delete the file test
-    INDEX.deleteOnExit()
+    //INDEX.deleteOnExit()
   }
 
   //TESTS FOR THE COMMIT

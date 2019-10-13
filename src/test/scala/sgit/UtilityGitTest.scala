@@ -1,15 +1,23 @@
 package sgit
 
+import java.io.File
+
 import org.scalatest.{BeforeAndAfter, FunSpec, GivenWhenThen, Matchers}
+
+import scala.reflect.io.Directory
 
 class UtilityGitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
 
-  //TEST FOR "sha1Transformation" FUNCTION
-  describe("Given a file README.md content only README ") {
-    //it("Should return a string '?????????trouver quoi '"){}
-    //TODO
+  before {
+    //create the repo
+    //Init.init()
+    //create the file for test
   }
+  after {
+    //delete all
+    //new Directory(new File(System.getProperty("user.dir") + "/.sgit")).deleteRecursively()
 
+  }
   //TEST FOR "getContent" FUNCTION
   describe("Given a file README.md content only README ") {
     //it("Should return a string 'README'"){}
