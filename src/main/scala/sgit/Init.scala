@@ -2,10 +2,14 @@ package sgit
 
 import java.io.File
 
-import sgit.Add.writeInAFile
+import sgit.UtilityGit._
 
 object Init {
 
+  /**
+   *
+   * @return
+   */
   def init(): String = {
     //check if the folder .sgit already exist
 

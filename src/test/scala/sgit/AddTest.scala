@@ -9,9 +9,9 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
     //create the file test
 
     describe("Run the function blob"){
-      //it("Should create a file name 'README.md content hash' "){}
+      //it("Should create a file name 'test.md content hash' "){}
       //TODO
-      //it("Should create a file content the same content of the file README.md"){}
+      //it("Should create a file content the same content of the file test.md"){}
     }
 
     describe("Run the function add for test.md"){

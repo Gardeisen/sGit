@@ -11,17 +11,17 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
 
     //it("Should create a folder .sgit"){}
 
-    //it("Should create a file .sgit/objects"){}
+    //it("Should create a folder .sgit/objects"){}
 
-    //it("Should create a file .sgit/branches"){}
+    //it("Should create a folder .sgit/branches"){}
 
-    //it("Should create a file .sgit/tags"){}
+    //it("Should create a folder .sgit/tags"){}
 
-    //it("Should create a file .sgit/objects/blob"){}
+    //it("Should create a folder .sgit/objects/blob"){}
 
-    //it("Should create a file .sgit/objects/tree"){}
+    //it("Should create a folder .sgit/objects/tree"){}
 
-    //it("Should create a file .sgit/branches"){}
+    //it("Should create a folder .sgit/branches"){}
 
     //it("Should print already initialized if a repo already exist"){}
 
