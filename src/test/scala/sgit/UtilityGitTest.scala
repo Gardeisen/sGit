@@ -9,7 +9,6 @@ import scala.reflect.io.Directory
 class UtilityGitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
 
   val path = System.getProperty("user.dir")
-
   val fileTest = new File(path + "/src/test/scala/sgit/fileTest.txt")
   before {
     //create the repo
