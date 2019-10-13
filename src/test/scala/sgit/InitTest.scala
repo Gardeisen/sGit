@@ -20,8 +20,6 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
   //TESTS FOR THE INIT
   describe("When I run the init command") {
 
-
-
     it("Should create a file HEAD") {
       val head = new File(path + "/.sgit/HEAD")
       head.exists() shouldBe true
