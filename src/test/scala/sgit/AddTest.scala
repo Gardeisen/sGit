@@ -16,7 +16,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
     //create the repo
     Init.init()
     fileTest.createNewFile()
-    writeInAFile(fileTest,"test")
+    writeInAFile(fileTest, "test")
   }
   after {
     //delete all
@@ -30,44 +30,67 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       it("Should create a file name 'fileTest.txt content hash' in the good repo") {
         Add.createBlob(fileTest)
         val sha = sha1Transformation(getContent(fileTest))
-        new File(path+"/.sgit/objects/blob/"+sha).exists() shouldBe true
+        new File(path + "/.sgit/objects/blob/" + sha).exists() shouldBe true
       }
 
-      it("Should create a file content the same content of the fileTest.txt"){
+      it("Should create a file content the same content of the fileTest.txt") {
         Add.createBlob(fileTest)
         val sha = sha1Transformation(getContent(fileTest))
-        getContent(new File(path+"/.sgit/objects/blob/"+sha)) shouldBe "test\n"
+        getContent(new File(path + "/.sgit/objects/blob/" + sha)) shouldBe "test\n"
       }
     }
 
     describe("Run the function add for fileTest.txt") {
-      it("Should not create blob if file doesn't exist"){
+      it("Should not create blob if file doesn't exist") {
         val unKnowFile = new File("nowhere")
         Add.addOneFile(unKnowFile)
-        new File(path+"/.sgit/objects/blob/"+sha1Transformation(getContent(fileTest))).exists() shouldBe false
+        new File(path + "/.sgit/objects/blob/" + sha1Transformation(getContent(fileTest))).exists() shouldBe false
       }
-      it("Should add to a file INDEX a line : fileTest.txt and the blob associate"){
+      it("Should add to a file INDEX a line : fileTest.txt and the blob associate") {
         Add.addOneFile(fileTest)
-        val index =new File(path+"/.sgit/INDEX")
-        getContent(index).contains("fileTest.txt "+ sha1Transformation(getContent(fileTest))) shouldBe true
+        val index = new File(path + "/.sgit/INDEX")
+        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest))) shouldBe true
       }
 
     }
 
     describe("Run the function add for  fileTest.txt which have been modified") {
-      writeInAFile(fileTest,"something more")
-      it("Should create a new blob"){
+      writeInAFile(fileTest, "something more")
+      it("Should create a new blob") {
         Add.addOneFile(fileTest)
-        new File(path+"/.sgit/objects/blob/"+sha1Transformation(getContent(fileTest))).exists() shouldBe true
+        new File(path + "/.sgit/objects/blob/" + sha1Transformation(getContent(fileTest))).exists() shouldBe true
       }
 
-      //it("Should transform the line in the index with the new blob"){}
-      //TODO
+      it("Should transform the line in the index with the new blob") {
+        Add.addOneFile(fileTest)
+        val index = new File(path + "/.sgit/INDEX")
+        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest))) shouldBe true
+      }
     }
 
-    describe("Run the function add for test.md and testTwo.md :  ie a array of folder") {
-      //it("Should write two line in the INDEX"){}
-      //TODO
+    describe("Run the function add for fileTest.txt and fileTestTwo.txt :  ie a array of folder") {
+      it("Should write two line in the INDEX"){
+        val fileTestTwo = new File(path + "/src/test/scala/sgit/fileTestTwo.txt")
+        fileTestTwo.createNewFile()
+        writeInAFile(fileTestTwo, "testTwo")
+        Add.add(Seq[File](fileTest,fileTestTwo))
+        val index = new File(path + "/.sgit/INDEX")
+        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest))) shouldBe true
+        getContent(index).contains("fileTestTwo.txt " + sha1Transformation(getContent(fileTestTwo))) shouldBe true
+        fileTestTwo.delete()
+        fileTest.delete()
+      }
+      it("Should create two blob"){
+        val fileTestTwo = new File(path + "/src/test/scala/sgit/fileTestTwo.txt")
+        fileTestTwo.createNewFile()
+        writeInAFile(fileTestTwo, "testTwo")
+        Add.add(Seq[File](fileTest,fileTestTwo))
+        new File(path + "/.sgit/objects/blob/" + sha1Transformation(getContent(fileTest))).exists() shouldBe true
+        new File(path + "/.sgit/objects/blob/" + sha1Transformation(getContent(fileTestTwo))).exists() shouldBe true
+        fileTestTwo.delete()
+        fileTest.delete()
+      }
+
     }
   }
 
