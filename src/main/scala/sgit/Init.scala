@@ -9,7 +9,7 @@ object Init {
   /**
    * Function Init, the aims is to create all the repository
    */
-  def init(): Unit = {
+  def init(): String = {
     //check if the folder .sgit already exist
 
     if (!new File(System.getProperty("user.dir") + "/.sgit").exists()) {
@@ -32,11 +32,11 @@ object Init {
       head.createNewFile()
       //write content
       writeInAFile(head,"branches/master")
-      println(".sgit initialized")
+      ".sgit initialized"
     }
     // if it already exist -> "the folder already exist"
     else {
-      println("the repository already exist")
+      "the repository already exist"
     }
 
   }

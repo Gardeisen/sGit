@@ -59,12 +59,12 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
       tree.exists() shouldBe true
     }
 
-   /* it("Should not be true if a repo already exist") {
-      //Init.init()
+    it("Should not be true if a repo already exist") {
+
       val repo = new File(path + "/.sgit")
-      repo.exists() shouldBe false
-       }
-*/
+      Init.init() shouldBe "the repository already exist"
+    }
+
 
   }
 }

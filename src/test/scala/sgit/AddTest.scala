@@ -2,11 +2,13 @@ package sgit
 
 import java.io.File
 
+import org.mockito.IdiomaticMockito
 import org.scalatest.{BeforeAndAfter, FunSpec, GivenWhenThen, Matchers}
 import sgit.UtilityGit._
+
 import scala.reflect.io.Directory
 
-class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
+class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter with IdiomaticMockito {
 
   val path = System.getProperty("user.dir")
   val fileTest = new File(path + "/src/test/scala/sgit/fileTest.txt")
@@ -31,24 +33,34 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
         new File(path+"/.sgit/objects/blob/"+sha).exists() shouldBe true
       }
 
-      it("Should create a file content the same content of the file test.md"){
+      it("Should create a file content the same content of the fileTest.txt"){
         Add.createBlob(fileTest)
         val sha = sha1Transformation(getContent(fileTest))
         getContent(new File(path+"/.sgit/objects/blob/"+sha)) shouldBe "test\n"
       }
     }
 
-    describe("Run the function add for test.md") {
-      //it("Should print unknown if file doesn't exist"){}
-      //TODO
-      //WARNING mock INDEX ??? Possible ?? comment ne pas ecrire dans le vrai index
-      //it("Should add to a file INDEX a line : test.md and the blob associate"){}
-      //TODO
+    describe("Run the function add for fileTest.txt") {
+      it("Should not create blob if file doesn't exist"){
+        val unKnowFile = new File("nowhere")
+        Add.addOneFile(unKnowFile)
+        new File(path+"/.sgit/objects/blob/"+sha1Transformation(getContent(fileTest))).exists() shouldBe false
+      }
+      it("Should add to a file INDEX a line : fileTest.txt and the blob associate"){
+        Add.addOneFile(fileTest)
+        val index =new File(path+"/.sgit/INDEX")
+        getContent(index).contains("fileTest.txt "+ sha1Transformation(getContent(fileTest))) shouldBe true
+      }
+
     }
-    describe("Run the function add for test.md which have been modified") {
-      //modified the content of the file test
-      //it("Should create a nwe blob"){}
-      //TODO
+
+    describe("Run the function add for  fileTest.txt which have been modified") {
+      writeInAFile(fileTest,"something more")
+      it("Should create a new blob"){
+        Add.addOneFile(fileTest)
+        new File(path+"/.sgit/objects/blob/"+sha1Transformation(getContent(fileTest))).exists() shouldBe true
+      }
+
       //it("Should transform the line in the index with the new blob"){}
       //TODO
     }
