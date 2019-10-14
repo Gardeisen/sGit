@@ -15,7 +15,7 @@ object Commit {
    */
   def createTableOfPath(file: File): Array[Array[String]] = {
     val content = getContent(file)
-    val split = content.split("[\n, ]")
+    val split = content.split("[ ,\n]")
     val splitStepTwo = split.filter(e => split.indexOf(e) == 0 || split.indexOf(e) % 2 == 0)
     splitStepTwo.map(e => e.split("""(\\)"""))
   }

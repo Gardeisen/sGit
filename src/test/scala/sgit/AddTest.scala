@@ -36,7 +36,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       it("Should create a file content the same content of the fileTest.txt") {
         Add.createBlob(fileTest)
         val sha = sha1Transformation(getContent(fileTest))
-        getContent(new File(path + "/.sgit/objects/blob/" + sha)) shouldBe "test\n"
+        getContent(new File(path + "/.sgit/objects/blob/" + sha)) shouldBe "test"
       }
     }
 
