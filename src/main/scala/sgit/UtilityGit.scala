@@ -4,10 +4,13 @@ import java.io.{BufferedReader, File, FileReader, FileWriter}
 import java.math.BigInteger
 import java.security.MessageDigest
 
+import scala.io.Source
+
 object UtilityGit {
 
   /**
    * Function sha1Transformation
+   *
    * @param s : the String you want to hash
    * @return a String correspond to the param hash
    */
@@ -22,27 +25,21 @@ object UtilityGit {
 
   /**
    * Function getContent
+   *
    * @param file : the file you want to get the content
    * @return a String correspond to the content
    */
   def getContent(file: File): String = {
-      @scala.annotation.tailrec
-      def apply(bufferedReader: BufferedReader, content:String):String= {
-        val line = bufferedReader.readLine()
-        if (line == null) content
-        else apply(bufferedReader, content.concat(line + "\n"))
-      }
-      val file_reader = new FileReader(file)
-      val buffered_reader = new BufferedReader(file_reader)
-      val result = apply(buffered_reader,"")
-      buffered_reader.close()
-      file_reader.close()
-      result
+    val buffered_reader = Source.fromFile(file)
+    val content = buffered_reader.getLines().mkString("\n")
+    buffered_reader.close()
+    content
   }
 
   /**
    * Function WriteInAFile
-   * @param file : the file you want to write in
+   *
+   * @param file    : the file you want to write in
    * @param content : the content you want to write
    */
   def writeInAFile(file: File, content: String) {

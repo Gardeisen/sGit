@@ -12,6 +12,10 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
 
   val path = System.getProperty("user.dir")
 
+  after(
+    new Directory(new File(path + "/.sgit")).deleteRecursively()
+  )
+
   describe("Given an array of array of Stings") {
     val list = Array(Array("marine", "gardeisen", "3"), Array("mathieu", "gardeisen", "4"), Array("2"), Array("marine", "4"))
     //TEST FOR THE "deepLengthMax" FUNCTION
@@ -26,20 +30,22 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
 
     //TESTS FOR "createTableOfPath" function
     describe("I want to get the table of path associate ie: for one cell get a word of the path") {
-      it("Should give a list of size 2") {
+      it("Should give a list of size 1") {
         Init.init()
         Add.add(Seq[File](new File(path+"/README.md")))
         val index = new File(path + "/.sgit/INDEX")
         val tablePath = Commit.createTableOfPath(index)
+        tablePath.isEmpty shouldBe false
         tablePath.length shouldBe 1
+        new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
-      it("Should put src the first element of the first array") {
+
+      it("Should put src in the first element of the first array") {
         Init.init()
         Add.add(Seq[File](new File(path+"/src/main/scala/sgit/Add.scala")))
         val index = new File(path + "/.sgit/INDEX")
         val tablePath = Commit.createTableOfPath(index)
-        tablePath.apply(0).apply(0) shouldBe "README.md"
-
+        tablePath.apply(0).apply(0) shouldBe "src"
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
       it("Should put sgit in the fourth element of the first array") {
@@ -47,13 +53,13 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         Add.add(Seq[File](new File(path+"/src/main/scala/sgit/Add.scala")))
         val index = new File(path + "/.sgit/INDEX")
         val tablePath = Commit.createTableOfPath(index)
-        tablePath.apply(0).apply(0) shouldBe "README.md"
+        tablePath.apply(0).apply(3) shouldBe "sgit"
 
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
     }
     //TEST FOR THE "createMapIndex" FUNCTION
-    describe("I want to get the map which associate the index to the ref blob") {
+    /*describe("I want to get the map which associate the index to the ref blob") {
       it("Should give a map with two keys") {
         Init.init()
         Add.add(Seq[File](new File(path+path+"/README.md")))
@@ -73,7 +79,7 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
 
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
-    }
+    }*/
   }
 
   //TESTS FOR THE COMMIT

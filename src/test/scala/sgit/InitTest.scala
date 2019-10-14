@@ -26,7 +26,7 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
     }
     it("HEAD Should contains branches/master") {
       val head = new File(path + "/.sgit/HEAD")
-      getContent(head) shouldBe "branches/master\n"
+      getContent(head) shouldBe "branches/master"
     }
 
     it("Should create a folder .sgit") {
