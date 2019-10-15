@@ -29,11 +29,10 @@ object Commit {
    * @param file : the file you want to transform into a Map
    * @return a Map which correspond to the file mapped
    */
-  def createMapIndex(file: File): Map[String, String] = {
+  def createMapIndex(file: File = new File(System.getProperty("user.dir") + "/.sgit/INDEX")): Map[String, String] = {
 
-    val content = getContent(file)
-    val split = content.split("\n")
-    split.map(e => (e.split(" ").apply(0), e.split(" ").apply(1))).toMap
+    getContent(file).map(e=> (e.split(" ").head,e.split(" ").tail.mkString)).toMap
+
   }
 
   /**
@@ -62,11 +61,11 @@ object Commit {
     if (element.isEmpty) {
       0
     }
-    else if (element.contains("\\")) {
+    else if (element.contains("""(\\)""")) {
       1
     }
     else {
-      element.split(("\\")).length
+      element.split(("""(\\)""")).length
     }
   }
 
@@ -79,7 +78,7 @@ object Commit {
       line
     }
     else {
-      cutLineByLength(line.splitAt(line.lastIndexOf("\\"))._1, length)
+      cutLineByLength(line.splitAt(line.lastIndexOf("""(\\)"""))._1, length)
     }
   }
 
@@ -91,24 +90,29 @@ object Commit {
     list.groupMap(line => cutLineByLength(line, length - 1))(line => line)
   }
 
-  /**
-   * Function createTree
-   *
-   * @param children    : the list of under file that are liked
-   * @param pathToWrite : the path you want to write the tree
-   * @return a file which is the tree build
-   */
-  def createTree(children: List[String], pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): File = {
-    val content = children.mkString("\n")
-    val tree = new File(pathToWrite + sha1Transformation(content))
-    tree.createNewFile()
-    writeInAFile(tree, content)
+
+  def createTree(children: List[String], path: String, pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/trees/"): File = {
+
+    val tree = new File(pathToWrite + sha1Transformation(path))
+    if (!tree.exists()) {
+      tree.createNewFile()
+      writeInAFile(tree,
+        children.map(
+          path => if (new File(System.getProperty("user.dir") + "/.sgit/objects/blobs/" + createMapIndex().get(path)).exists()) {
+            "blob " + path + " " + createMapIndex().get(path)
+          }
+          else {
+            //it's a tree
+            "tree " + path + " " + sha1Transformation(path)
+          }).mkString("\n")
+      )
+    }
     tree
   }
 
   def createTreeFromMap(mapUse: Map[String, List[String]]): List[File] = {
 
-    mapUse.toList.map(couple => createTree(couple._2))
+    mapUse.toList.map(couple => createTree(couple._2, couple._1))
 
   }
 
@@ -122,16 +126,17 @@ object Commit {
         fileList.last
       }
       else {
-        createTreesFromIndexRec(length - 1, fileList ++ createTreeFromMap(createMapFromList(listIndex, length)))
+        createTreesFromIndexRec(length - 1, createTreeFromMap(createMapFromList(listIndex, length)))
       }
     }
+
     createTreesFromIndexRec(deepLengthMax(listIndex))
   }
 
   def commit(): File = {
     val lastTree = createTreesFromIndex()
-    val content = getContent(lastTree)
-    val commit = new File(System.getProperty("user.dir") + "/.sgit/objects/commit" + sha1Transformation(content))
+    val content = getContent(lastTree).mkString("\n")
+    val commit = new File(System.getProperty("user.dir") + "/.sgit/objects/commits/" + sha1Transformation(content))
     commit.createNewFile()
     writeInAFile(commit, content)
     commit

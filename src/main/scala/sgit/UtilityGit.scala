@@ -29,11 +29,13 @@ object UtilityGit {
    * @param file : the file you want to get the content
    * @return a String correspond to the content
    */
-  def getContent(file: File): String = {
+  def getContent(file: File): List[String] = {
     val buffered_reader = Source.fromFile(file)
-    val content = buffered_reader.getLines().mkString("\n")
+    val content = buffered_reader.getLines()
+    val res = content.toList
     buffered_reader.close()
-    content
+    res
+
   }
 
   /**
