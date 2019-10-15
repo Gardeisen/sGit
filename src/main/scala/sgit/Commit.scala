@@ -31,7 +31,7 @@ object Commit {
    */
   def createMapIndex(file: File = new File(System.getProperty("user.dir") + "/.sgit/INDEX")): Map[String, String] = {
 
-    getContent(file).map(e=> (e.split(" ").head,e.split(" ").tail.mkString)).toMap
+    getContent(file).map(e => (e.split(" ").head, e.split(" ").tail.mkString)).toMap
 
   }
 
@@ -45,7 +45,7 @@ object Commit {
   @tailrec
   def deepLengthMax(tab: List[String], length: Int = 0): Int = {
     if (tab.isEmpty) {
-      return length
+      length
     }
     else {
       if (tab.head.length > length) {
@@ -59,6 +59,7 @@ object Commit {
 
   /**
    * Function getLengthOfElement compute for the string the length as per of the \
+   *
    * @param element : the string we want to compute the size
    * @return a int correspond to the size
    */
@@ -70,13 +71,14 @@ object Commit {
       1
     }
     else {
-      element.split(("""(\\)""")).length
+      element.split("""(\\)""").length
     }
   }
 
   /**
    * function cutLineByLength is use to segment the string as per of the \
-   * @param line : the string we want to cut
+   *
+   * @param line   : the string we want to cut
    * @param length : the index, size at where we want to cut
    * @return the string cut
    */
@@ -95,7 +97,8 @@ object Commit {
 
   /**
    * function createListByLength make a new list we the sting of the right size
-   * @param list : the global list
+   *
+   * @param list   : the global list
    * @param length : the size we want to cut
    * @return a list with the good element to the right size
    */
@@ -105,7 +108,8 @@ object Commit {
 
   /**
    * function createMapFromList transform a list into a map of the right size
-   * @param list the list we want to transform
+   *
+   * @param list   the list we want to transform
    * @param length the size of the element we want to make
    * @return the map
    */
@@ -115,8 +119,9 @@ object Commit {
 
   /**
    * function create tree
-   * @param children the folder or the file under the element study
-   * @param path the name of the tree before hash
+   *
+   * @param children    the folder or the file under the element study
+   * @param path        the name of the tree before hash
    * @param pathToWrite the location where the file will be write
    * @return a file correspond to the tree
    */
@@ -141,6 +146,7 @@ object Commit {
 
   /**
    * function createTreeFromMap create a tree from the map passed in parameter
+   *
    * @param mapUse : the map we want to turn into a tree
    * @return a list of file which correspond to the different tree
    */
@@ -152,6 +158,7 @@ object Commit {
 
   /**
    * function createTreesFromIndex create all the tree correspond to an Index
+   *
    * @return the last tree build
    */
   def createTreesFromIndex(): File = {
@@ -173,6 +180,7 @@ object Commit {
 
   /**
    * function commit create the file commit contains the ref to the last tree
+   *
    * @return the file correspond to the commit
    */
   def commit(): File = {
