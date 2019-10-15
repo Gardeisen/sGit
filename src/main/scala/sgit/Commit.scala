@@ -5,23 +5,27 @@ import java.io.File
 import sgit.UtilityGit._
 
 import scala.annotation.tailrec
+import scala.io.Source
 
 object Commit {
 
   /**
    * function createTableOfPath, function to simplify the rest of the function commit
+   *
    * @param file : the file you want to separate into a table of words
    * @return a matrix contains the file but one word for each cell
    */
-  def createTableOfPath(file: File): Array[Array[String]] = {
-    val content = getContent(file)
-    val split = content.split("[ ,\n]")
-    val splitStepTwo = split.filter(e => split.indexOf(e) == 0 || split.indexOf(e) % 2 == 0)
-    splitStepTwo.map(e => e.split("""(\\)"""))
+  def createTableOfPath(file: File): List[String] = {
+
+    val buffered_reader = Source.fromFile(file)
+    val content = buffered_reader.getLines().toList
+    buffered_reader.close()
+    content.map(line => line.split(" ").head)
   }
 
   /**
    * function createMapIndex, is a utility function to create parameters for the createTree function
+   *
    * @param file : the file you want to transform into a Map
    * @return a Map which correspond to the file mapped
    */
@@ -34,14 +38,15 @@ object Commit {
 
   /**
    * Function deepLengthMax, calcul the length max of a list of list
-   * @param tab : the list of list you want to know the max length
+   *
+   * @param tab    : the list of list you want to know the max length
    * @param length : use to store the result for the recursion
    * @return the length maximum of the tab
    */
   @tailrec
-  def deepLengthMax(tab: Array[Array[String]], length: Int = 0): Int = {
+  def deepLengthMax(tab: List[String], length: Int = 0): Int = {
     if (tab.isEmpty) {
-      length
+      return length
     }
     else {
       if (tab.head.length > length) {
@@ -53,13 +58,47 @@ object Commit {
     }
   }
 
+  def getLengthOfElement(element: String): Int = {
+    if (element.isEmpty) {
+      0
+    }
+    else if (element.contains("\\")) {
+      1
+    }
+    else {
+      element.split(("\\")).length
+    }
+  }
+
+  @tailrec
+  def cutLineByLength(line: String, length: Int): String = {
+    if (line.isEmpty) {
+      " "
+    }
+    else if (getLengthOfElement(line) <= length) {
+      line
+    }
+    else {
+      cutLineByLength(line.splitAt(line.lastIndexOf("\\"))._1, length)
+    }
+  }
+
+  def createListByLength(list: List[String], length: Int): List[String] = {
+    list.filter(line => getLengthOfElement(line) >= length).map(line => cutLineByLength(line, length))
+  }
+
+  def createMapFromList(list: List[String], length: Int): Map[String, List[String]] = {
+    list.groupMap(line => cutLineByLength(line, length - 1))(line => line)
+  }
+
   /**
    * Function createTree
-   * @param children : the list of under file that are liked
+   *
+   * @param children    : the list of under file that are liked
    * @param pathToWrite : the path you want to write the tree
    * @return a file which is the tree build
    */
-  def createTree(children: Array[String], pathToWrite: String): File = {
+  def createTree(children: List[String], pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): File = {
     val content = children.mkString("\n")
     val tree = new File(pathToWrite + sha1Transformation(content))
     tree.createNewFile()
@@ -67,66 +106,36 @@ object Commit {
     tree
   }
 
-  /**
-   * WIP
-   *
-   * @param mapIndex
-   * @param listTabPath
-   * @param deepLength
-   * @param mapParent
-   * @param pathToWrite
-   */
-  def createTreesForAllTheIndex(mapIndex: Map[String, String], listTabPath: Array[Array[String]], deepLength: Int,
-                                mapParent: Map[String, Array[String]] = Map.empty[String, Array[String]],
-                                pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/tree"): Unit = {
-    //Step 0 : case stop
-    if (deepLength == 1) {
-      val stepOne = listTabPath.map(e => e.head).distinct
-      var newMap = Map.empty[String, Array[String]]
-      stepOne.foreach(
-        e =>
-          if (mapIndex.contains(e)) {
-            newMap = newMap + ("" -> Array("blob " + mapIndex.apply(e) + " " + e))
-          }
-          else {
-            val name = createTree(mapParent.apply(e), pathToWrite).getName
-            newMap = newMap + ("" -> Array("tree " + name + " " + e))
-          }
-      )
-      //attention regarder si on a bien pris le bon path ???
-      createTree(newMap.apply(""), pathToWrite)
-    }
-    else {
+  def createTreeFromMap(mapUse: Map[String, List[String]]): List[File] = {
 
-      val newMapParent  = listTabPath
-        .filter(e=> e.length==deepLength)
-        .map(e=> Array(e.apply(deepLength - 2),e.apply(deepLength -1)))
-        .groupBy(e => e.apply(0))
-
-      //pas sur voir ce que ca fait
-      newMapParent.foreach(
-        e => createTree(e._2.apply(0),pathToWrite)
-      )
-
-    }
+    mapUse.toList.map(couple => createTree(couple._2))
 
   }
 
-  /**
-   * WIP.....
-   */
-  def commit(): Unit = {
+  def createTreesFromIndex(): File = {
+    val index = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
+    val listIndex = createTableOfPath(index)
 
-    val INDEX = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
-    //TO DO
-    println("la longueur max =    ")
-    print(deepLengthMax(createTableOfPath(INDEX)))
-    //val deepLength = deepLengthMax(listTabPath) pour lancer createTreeOfIndex
+    @tailrec
+    def createTreesFromIndexRec(length: Int, fileList: List[File] = List.empty): File = {
+      if (length == 0) {
+        fileList.last
+      }
+      else {
+        createTreesFromIndexRec(length - 1, fileList ++ createTreeFromMap(createMapFromList(listIndex, length)))
+      }
+    }
+    createTreesFromIndexRec(deepLengthMax(listIndex))
+  }
 
-    /*for ( e <- splitStepTwo) {
-      println(" [ \""+e._1+"\" : \""+e._2+"\" ]")
-    }*/
-
+  def commit(): File = {
+    val lastTree = createTreesFromIndex()
+    val content = getContent(lastTree)
+    val commit = new File(System.getProperty("user.dir") + "/.sgit/objects/commit" + sha1Transformation(content))
+    commit.createNewFile()
+    writeInAFile(commit, content)
+    commit
+    //WARNING add the date + things in branch/HEAD ???
   }
 
 }
