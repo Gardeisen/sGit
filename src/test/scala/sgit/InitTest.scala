@@ -26,7 +26,7 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
     }
     it("HEAD Should contains branches/master") {
       val head = new File(path + "/.sgit/HEAD")
-      getContent(head) shouldBe "branches/master"
+      getContent(head).mkString("\n") shouldBe "branches/master"
     }
 
     it("Should create a folder .sgit") {
@@ -49,13 +49,13 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
       tags.exists() shouldBe true
     }
 
-    it("Should create a folder .sgit/objects/blob") {
-      val blob = new File(path + "/.sgit/objects/blob")
+    it("Should create a folder .sgit/objects/blobs") {
+      val blob = new File(path + "/.sgit/objects/blobs")
       blob.exists() shouldBe true
     }
 
-    it("Should create a folder .sgit/objects/tree") {
-      val tree = new File(path + "/.sgit/objects/tree")
+    it("Should create a folder .sgit/objects/trees") {
+      val tree = new File(path + "/.sgit/objects/trees")
       tree.exists() shouldBe true
     }
 

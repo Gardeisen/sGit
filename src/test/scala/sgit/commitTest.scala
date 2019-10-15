@@ -3,7 +3,6 @@ package sgit
 import java.io.File
 
 import org.scalatest._
-import sgit.UtilityGit._
 
 import scala.reflect.io.Directory
 
@@ -17,7 +16,7 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   )
 
   describe("Given an array of array of Stings") {
-    val list = Array(Array("marine", "gardeisen", "3"), Array("mathieu", "gardeisen", "4"), Array("2"), Array("marine", "4"))
+    val list = List("marine\\gardeisen\\3","mathieu\\4")
     //TEST FOR THE "deepLengthMax" FUNCTION
     describe("If I want the deepest length") {
       it("Should give 3 as result") {

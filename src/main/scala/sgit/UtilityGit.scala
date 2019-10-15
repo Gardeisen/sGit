@@ -47,7 +47,7 @@ object UtilityGit {
   def writeInAFile(file: File, content: String) {
     //warning, param append = true correspond to the fact that we don't want overwrite the file just write at the end
     val fileWriter = new FileWriter(file, true)
-    fileWriter.write(content)
+    fileWriter.write(content + "\n")
     fileWriter.close()
   }
 

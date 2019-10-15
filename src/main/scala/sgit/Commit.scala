@@ -44,18 +44,18 @@ object Commit {
    */
   @tailrec
   def deepLengthMax(tab: List[String], length: Int = 0): Int = {
+
     if (tab.isEmpty) {
       length
     }
+    else if (tab.head.split("""(\\)""").length > length) {
+      deepLengthMax(tab.tail, tab.head.split("""(\\)""").length)
+    }
     else {
-      if (tab.head.length > length) {
-        deepLengthMax(tab.tail, tab.head.length)
-      }
-      else {
-        deepLengthMax(tab.tail, length)
-      }
+      deepLengthMax(tab.tail, length)
     }
   }
+
 
   /**
    * Function getLengthOfElement compute for the string the length as per of the \

@@ -24,9 +24,9 @@ class UtilityGitTest extends FunSpec with Matchers with GivenWhenThen with Befor
   describe("Given a file test.txt content only test test ") {
     it("Should return a string 'test test' when getContent is call") {
       writeInAFile(fileTest, "test test\n")
-      getContent(fileTest) shouldBe "test test"
+      getContent(fileTest).mkString("\n") shouldBe "test test"
       writeInAFile(fileTest, "encore encore")
-      getContent(fileTest) shouldBe "test test\nencore encore"
+      getContent(fileTest).mkString("\n") shouldBe "test test\nencore encore"
 
       fileTest.delete()
     }

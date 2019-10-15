@@ -47,11 +47,12 @@ object Add {
       val dirPath = System.getProperty("user.dir")
       val filePath = file.getPath
       val filePathFromDir = filePath.replace(dirPath, "")
-      val content = getContent(INDEX).mkString("\n")
+      val content = getContent(INDEX)
       //Case where it's a file which have been modified
       if (content.contains(filePathFromDir)) {
-        val newIndexList = content.split("\n").filter(newIndexList => !newIndexList.contains(filePathFromDir))
+        val newIndexList = content.filter(newIndexList => !newIndexList.contains(filePathFromDir))
         val newIndex = newIndexList.mkString("\n")
+
         val fileWriter = new FileWriter(INDEX, false)
         fileWriter.write(newIndex + "\n" + filePathFromDir + " " + sha1Transformation(getContent(file).mkString("\n")))
         fileWriter.close()
