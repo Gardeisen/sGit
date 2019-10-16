@@ -189,7 +189,7 @@ object Commit {
     commit.createNewFile()
     writeInAFile(commit, content)
     commit
-    //WARNING add the date + things in branch/HEAD ???
+    //WARNING add the date ?
   }
 
 }

@@ -59,6 +59,10 @@ class InitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAf
       tree.exists() shouldBe true
     }
 
+    it("Should create a file .sgit/branches/master") {
+      new File(path + "/.sgit/branches/master").exists() shouldBe true
+    }
+
     it("Should not be true if a repo already exist") {
 
       val repo = new File(path + "/.sgit")

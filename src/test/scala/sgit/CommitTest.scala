@@ -148,7 +148,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       getContent(
         Commit.createTree(
           List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit")
-      ).mkString("\n").contains("3e30fc756275ac084911e3c11cbc16ffc6c4a1e8") shouldBe true
+      ).mkString("\n").contains("src\\main\\scala\\sgit\\Init.scala") shouldBe true
     }
 
     it("Should contains the tree and their hash ") {

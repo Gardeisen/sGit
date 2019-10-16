@@ -30,6 +30,8 @@ object Init {
       //file HEAD, refs/branch/master
       val head = new File(System.getProperty("user.dir") + "/.sgit/HEAD")
       head.createNewFile()
+      val master = new File(System.getProperty("user.dir") + "/.sgit/branches/master")
+      master.createNewFile()
       //write content
       writeInAFile(head,"branches/master")
       ".sgit initialized"
