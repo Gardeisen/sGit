@@ -137,19 +137,19 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       Init.init()
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
-      Add.add(Seq[File](add,init))
+      Add.add(Seq[File](add, init))
       Commit.createTree(List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit").exists() shouldBe true
     }
-   it("Should contains the different blob and their hash ") {
-     Init.init()
-     val add = new File(path + "/src/main/scala/sgit/Add.scala")
-     val init = new File(path + "/src/main/scala/sgit/Init.scala")
-     Add.add(Seq[File](add,init))
-     getContent(
-       Commit.createTree(
-         List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit")
-     ).mkString("\n").contains("3e30fc756275ac084911e3c11cbc16ffc6c4a1e8") shouldBe true
-   }
+    it("Should contains the different blob and their hash ") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      Add.add(Seq[File](add, init))
+      getContent(
+        Commit.createTree(
+          List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit")
+      ).mkString("\n").contains("3e30fc756275ac084911e3c11cbc16ffc6c4a1e8") shouldBe true
+    }
 
     it("Should contains the tree and their hash ") {
       Init.init()
@@ -161,8 +161,23 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       ).mkString("\n") shouldBe "tree src\\main\\scala\\sgit " + sha1Transformation("src\\main\\scala\\sgit")
     }
 
-   new Directory(new File(path + "/.sgit")).deleteRecursively()
+    new Directory(new File(path + "/.sgit")).deleteRecursively()
 
+  }
+
+  //TESTS FOR function createTreeFromMap
+  describe("When I call the function on a map src/main/scala/sgit -> (Add.scala, Init.scala)") {
+    it("Should build a tree name sha(src/main/scala/sgit)") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      Add.add(Seq[File](add, init))
+      val map = Map("src\\main\\scala\\sgit"->List("src\\main\\scala\\sgit\\Add.scala","src\\main\\scala\\sgit\\Init.scala"))
+      Commit.createTreeFromMap(map)
+      new File(path+ "/.sgit/objects/trees/"+sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
+
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
   }
 
   //TESTS FOR function
