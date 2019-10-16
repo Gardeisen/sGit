@@ -3,6 +3,7 @@ package sgit
 import java.io.File
 
 import org.scalatest._
+import sgit.UtilityGit.{getContent, sha1Transformation}
 
 import scala.reflect.io.Directory
 
@@ -36,7 +37,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         val tablePath = Commit.createTableOfPath(index)
         tablePath.isEmpty shouldBe false
         tablePath.length shouldBe 1
-        tablePath.apply(0) shouldBe "\\README.md"
+        tablePath.apply(0) shouldBe "README.md"
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
     }
@@ -58,7 +59,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         val index = new File(path + "/.sgit/INDEX")
         val mapIndex = Commit.createMapIndex(index)
 
-        mapIndex("\\README.md") shouldBe UtilityGit.sha1Transformation(UtilityGit.getContent(readme).mkString("\n"))
+        mapIndex("README.md") shouldBe UtilityGit.sha1Transformation(UtilityGit.getContent(readme).mkString("\n"))
 
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
@@ -72,69 +73,102 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       Commit.getLengthOfElement("") shouldBe 0
     }
     it("Should return 1 for the following string") {
-      Commit.getLengthOfElement("\\marine") shouldBe 1
+      Commit.getLengthOfElement("marine") shouldBe 1
     }
     it("should return 4 for the following String") {
-      Commit.getLengthOfElement("\\marine\\gardeisen\\mathieu\\4") shouldBe 4
+      Commit.getLengthOfElement("marine\\gardeisen\\mathieu\\4") shouldBe 4
     }
 
   }
 
   //TESTS FOR function cutLineByLength
-  describe("When I call the function cutLineByLength for the string  \\marine\\gardeisen\\mathieu\\4 ") {
+  describe("When I call the function cutLineByLength for the string  marine\\gardeisen\\mathieu\\4 ") {
     it("Should return /marine/gardeisen for size 2") {
-      Commit.getLengthOfElement("\\marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
-      Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4", 2) shouldBe "\\marine\\gardeisen"
+      Commit.getLengthOfElement("marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
+      Commit.cutLineByLength("marine\\gardeisen\\mathieu\\4", 2) shouldBe "marine\\gardeisen"
     }
     it("Should return /marine/gardeisen/mathieu/4 for size 4") {
-      Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4", 4) shouldBe "\\marine\\gardeisen\\mathieu\\4"
+      Commit.cutLineByLength("marine\\gardeisen\\mathieu\\4", 4) shouldBe "marine\\gardeisen\\mathieu\\4"
     }
   }
 
   //TESTS FOR function createListByLength
   describe("When I call the createListByLength function on this list (marine/4,mathieu/gardeisen/5,6) ") {
-    val list = List("\\marine\\4", "\\mathieu\\gardeisen\\5", "\\6")
+    val list = List("marine\\4", "mathieu\\gardeisen\\5", "6")
     it("Should return List(marine/4,mathieu/gardeisen) for size 2") {
-      Commit.createListByLength(list, 2).apply(0) shouldBe "\\marine\\4"
-      Commit.createListByLength(list, 2).apply(1) shouldBe "\\mathieu\\gardeisen"
+      Commit.createListByLength(list, 2).apply(0) shouldBe "marine\\4"
+      Commit.createListByLength(list, 2).apply(1) shouldBe "mathieu\\gardeisen"
     }
     it("Should return List(mathieu/gardeisen/5) for size 3") {
-      Commit.createListByLength(list, 3).apply(0) shouldBe "\\mathieu\\gardeisen\\5"
+      Commit.createListByLength(list, 3).apply(0) shouldBe "mathieu\\gardeisen\\5"
     }
     it("Should return List(marine,mathieu,6) for size 1") {
-      Commit.createListByLength(list, 1).apply(0) shouldBe "\\marine"
-      Commit.createListByLength(list, 1).apply(1) shouldBe "\\mathieu"
+      Commit.createListByLength(list, 1).apply(0) shouldBe "marine"
+      Commit.createListByLength(list, 1).apply(1) shouldBe "mathieu"
       Commit.getLengthOfElement(list.apply(2)) shouldBe 1
-      Commit.createListByLength(list, 1).apply(2) shouldBe "\\6"
+      Commit.createListByLength(list, 1).apply(2) shouldBe "6"
     }
 
   }
 
   //TESTS FOR function createMapFromList
   describe("When I call the function createMapFromList on this list (marine/4,mathieu/gardeisen/5,6) ") {
-    val list = List("\\marine\\4", "\\mathieu\\gardeisen\\5", "\\6")
+    val list = List("marine\\4", "mathieu\\gardeisen\\5", "6")
 
-    it("Should for size 2 return the map : /marine -> 4 , /mathieu -> gardeisen"){
-      Commit.createMapFromList(list,2)("\\marine").apply(0) shouldBe "\\marine\\4"
-      Commit.createMapFromList(list,2)("\\mathieu").apply(0) shouldBe "\\mathieu\\gardeisen"
+    it("Should for size 2 return the map : /marine -> 4 , /mathieu -> gardeisen") {
+      Commit.createMapFromList(list, 2)("marine").apply(0) shouldBe "marine\\4"
+      Commit.createMapFromList(list, 2)("mathieu").apply(0) shouldBe "mathieu\\gardeisen"
     }
 
-    it("Should for size 1 return the map :   -> marine,mathieu,6 "){
-      Commit.createMapFromList(list,1)(" ").apply(0) shouldBe "\\marine"
-      Commit.createMapFromList(list,1)(" ").apply(1) shouldBe "\\mathieu"
-      Commit.createMapFromList(list,1)(" ").apply(2) shouldBe "\\6"
+    it("Should for size 1 return the map :   -> marine,mathieu,6 ") {
+      Commit.createMapFromList(list, 1)(" ").apply(0) shouldBe "marine"
+      Commit.createMapFromList(list, 1)(" ").apply(1) shouldBe "mathieu"
+      Commit.createMapFromList(list, 1)(" ").apply(2) shouldBe "6"
     }
-    it("Should for size 3 return the map : mathieu/gardeisen -> mathieu/gardeisen/5 "){
-      Commit.createMapFromList(list,3)("\\mathieu\\gardeisen").apply(0) shouldBe "\\mathieu\\gardeisen\\5"
+    it("Should for size 3 return the map : mathieu/gardeisen -> mathieu/gardeisen/5 ") {
+      Commit.createMapFromList(list, 3)("mathieu\\gardeisen").apply(0) shouldBe "mathieu\\gardeisen\\5"
     }
   }
 
-  //TESTS FOR THE COMMIT
-  describe("???") {
-    describe("????") {
-      //it("")
-      //TODO
+  //TESTS FOR function create tree
+  describe("When I call the function createTree(L(src/main/scala/sgit/Add.scala,src/main/scala/sgit/Init.scala),src/main/scala/sgit)") {
+
+    it("Should create a file sha(src/main/scala/sgit)") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      Add.add(Seq[File](add,init))
+      Commit.createTree(List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit").exists() shouldBe true
     }
+   it("Should contains the different blob and their hash ") {
+     Init.init()
+     val add = new File(path + "/src/main/scala/sgit/Add.scala")
+     val init = new File(path + "/src/main/scala/sgit/Init.scala")
+     Add.add(Seq[File](add,init))
+     getContent(
+       Commit.createTree(
+         List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit")
+     ).mkString("\n").contains("3e30fc756275ac084911e3c11cbc16ffc6c4a1e8") shouldBe true
+   }
+
+    it("Should contains the tree and their hash ") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      Add.add(Seq[File](add))
+      getContent(
+        Commit.createTree(
+          List("src\\main\\scala\\sgit"), "src\\main\\scala")
+      ).mkString("\n") shouldBe "tree src\\main\\scala\\sgit " + sha1Transformation("src\\main\\scala\\sgit")
+    }
+
+   new Directory(new File(path + "/.sgit")).deleteRecursively()
+
+  }
+
+  //TESTS FOR function
+  describe("TODO") {
+    //it("")
+    //TODO
   }
 
 }

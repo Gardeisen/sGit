@@ -46,7 +46,7 @@ object Add {
       //get the different directory
       val dirPath = System.getProperty("user.dir")
       val filePath = file.getPath
-      val filePathFromDir = filePath.replace(dirPath, "")
+      val filePathFromDir = filePath.replace(dirPath+"\\", "")
       val content = getContent(INDEX)
       //Case where it's a file which have been modified
       if (content.contains(filePathFromDir)) {

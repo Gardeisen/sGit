@@ -71,7 +71,7 @@ object Commit {
       1
     }
     else {
-      element.split("""(\\)""").length-1
+      element.split("""(\\)""").length
     }
   }
 
@@ -121,23 +121,23 @@ object Commit {
    * function create tree
    *
    * @param children    the folder or the file under the element study
-   * @param path        the name of the tree before hash
+   * @param hisPath        the name of the tree before hash
    * @param pathToWrite the location where the file will be write
    * @return a file correspond to the tree
    */
-  def createTree(children: List[String], path: String, pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/trees/"): File = {
+  def createTree(children: List[String], hisPath: String, pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/trees/"): File = {
 
-    val tree = new File(pathToWrite + sha1Transformation(path))
+    val tree = new File(pathToWrite + sha1Transformation(hisPath))
     if (!tree.exists()) {
       tree.createNewFile()
       writeInAFile(tree,
         children.map(
-          path => if (new File(System.getProperty("user.dir") + "/.sgit/objects/blobs/" + createMapIndex().get(path)).exists()) {
-            "blob " + path + " " + createMapIndex()(path)
+          child => if (createMapIndex().contains(child) && new File(System.getProperty("user.dir") + "/.sgit/objects/blobs/" + createMapIndex()(child)).exists()) {
+            "blob " + child + " " + createMapIndex()(child)
           }
           else {
             //it's a tree
-            "tree " + path + " " + sha1Transformation(path)
+            "tree " + child + " " + sha1Transformation(child)
           }).mkString("\n")
       )
     }
