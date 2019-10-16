@@ -96,7 +96,7 @@ object Commit {
   }
 
   /**
-   * function createListByLength make a new list we the sting of the right size
+   * function createListByLength make a new list we the string of the right size
    *
    * @param list   : the global list
    * @param length : the size we want to cut

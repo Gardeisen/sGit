@@ -82,18 +82,32 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
 
   //TESTS FOR function cutLineByLength
   describe("When I call the function cutLineByLength for the string  \\marine\\gardeisen\\mathieu\\4 ") {
-      it("Should return /marine/gardeisen for size 2") {
-        Commit.getLengthOfElement("\\marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
-        Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4",2) shouldBe "\\marine\\gardeisen"
-      }
-    it("Should return /marine/gardeisen/mathieu/4 for size 4"){
-      Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4",4) shouldBe "\\marine\\gardeisen\\mathieu\\4"
+    it("Should return /marine/gardeisen for size 2") {
+      Commit.getLengthOfElement("\\marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
+      Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4", 2) shouldBe "\\marine\\gardeisen"
+    }
+    it("Should return /marine/gardeisen/mathieu/4 for size 4") {
+      Commit.cutLineByLength("\\marine\\gardeisen\\mathieu\\4", 4) shouldBe "\\marine\\gardeisen\\mathieu\\4"
     }
   }
 
   //TESTS FOR function createListByLength
-  describe("???") {
-    //it("")
+  describe("When I call the createListByLength function on this list (marine/4,mathieu/gardeisen/5,6) ") {
+    val list = List("\\marine\\4", "\\mathieu\\gardeisen\\5", "\\6")
+    it("Should return List(marine/4,mathieu/gardeisen) for size 2") {
+      Commit.createListByLength(list, 2).apply(0) shouldBe "\\marine\\4"
+      Commit.createListByLength(list, 2).apply(1) shouldBe "\\mathieu\\gardeisen"
+    }
+    it("Should return List(mathieu/gardeisen/5) for size 3") {
+      Commit.createListByLength(list, 3).apply(0) shouldBe "\\mathieu\\gardeisen\\5"
+    }
+    it("Should return List(marine,mathieu,6) for size 1") {
+      Commit.createListByLength(list, 1).apply(0) shouldBe "\\marine"
+      Commit.createListByLength(list, 1).apply(1) shouldBe "\\mathieu"
+      Commit.getLengthOfElement(list.apply(2)) shouldBe 1
+      Commit.createListByLength(list, 1).apply(2) shouldBe "\\6"
+    }
+
   }
 
   //TESTS FOR function createMapFromList
