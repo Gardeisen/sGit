@@ -82,7 +82,6 @@ object Add {
       addOneFile(files.head)
       add(files.tail)
     }
-    println("the files have been added successfully")
   }
 
 
