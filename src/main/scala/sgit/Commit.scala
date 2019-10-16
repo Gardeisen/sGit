@@ -71,7 +71,7 @@ object Commit {
       1
     }
     else {
-      element.split("""(\\)""").length
+      element.split("""(\\)""").length-1
     }
   }
 
@@ -91,7 +91,7 @@ object Commit {
       line
     }
     else {
-      cutLineByLength(line.splitAt(line.lastIndexOf("""(\\)"""))._1, length)
+      cutLineByLength(line.splitAt(line.lastIndexOf('\\'))._1, length)
     }
   }
 
@@ -133,7 +133,7 @@ object Commit {
       writeInAFile(tree,
         children.map(
           path => if (new File(System.getProperty("user.dir") + "/.sgit/objects/blobs/" + createMapIndex().get(path)).exists()) {
-            "blob " + path + " " + createMapIndex().get(path)
+            "blob " + path + " " + createMapIndex()(path)
           }
           else {
             //it's a tree
