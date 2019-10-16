@@ -1,6 +1,6 @@
 package sgit
 
-import java.io.File
+import java.io.{File, FileWriter}
 
 import sgit.UtilityGit._
 
@@ -114,14 +114,14 @@ object Commit {
    * @return the map
    */
   def createMapFromList(list: List[String], length: Int): Map[String, List[String]] = {
-    list.groupMap(line => cutLineByLength(line, length - 1))(line => cutLineByLength(line,length))
+    list.groupMap(line => cutLineByLength(line, length - 1))(line => cutLineByLength(line, length))
   }
 
   /**
    * function create tree
    *
    * @param children    the folder or the file under the element study
-   * @param hisPath        the name of the tree before hash
+   * @param hisPath     the name of the tree before hash
    * @param pathToWrite the location where the file will be write
    * @return a file correspond to the tree
    */
@@ -174,7 +174,18 @@ object Commit {
         createTreesFromIndexRec(length - 1, createTreeFromMap(createMapFromList(listIndex, length)))
       }
     }
+
     createTreesFromIndexRec(deepLengthMax(listIndex))
+  }
+
+  /**
+   * function get branch
+   *
+   * @return a string correspond to the actual branch
+   */
+  def getBranch: String = {
+    val content = getContent(new File(System.getProperty("user.dir") + "/.sgit/HEAD")).mkString
+    content.splitAt(content.lastIndexOf("/"))._2
   }
 
   /**
@@ -185,10 +196,28 @@ object Commit {
   def commit(): File = {
     val lastTree = createTreesFromIndex()
     val content = getContent(lastTree).mkString("\n")
-    val commit = new File(System.getProperty("user.dir") + "/.sgit/objects/commits/" + sha1Transformation(content))
-    commit.createNewFile()
-    writeInAFile(commit, content)
-    commit
+    val newCommit = new File(System.getProperty("user.dir") + "/.sgit/objects/commits/" + sha1Transformation(content))
+
+    //write the last commit in the branch
+    val branches = new File(System.getProperty("user.dir") + "/.sgit/branches" + getBranch)
+    val fileWriter = new FileWriter(branches, false)
+    fileWriter.write(sha1Transformation(content) + "\n")
+    fileWriter.close()
+
+    //check if it's the first commit
+    if (!new File(System.getProperty("user.dir") + "/.sgit/objects/commits").exists()) {
+      new File(System.getProperty("user.dir") + "/.sgit/objects/commits").mkdirs()
+      newCommit.createNewFile()
+      writeInAFile(newCommit, content)
+    }
+    else {
+      newCommit.createNewFile()
+      writeInAFile(newCommit, content)
+      //Don't forget to get him a parent
+      writeInAFile(newCommit, "parent " + getContent(new File(System.getProperty("user.dir") + "/.sgit/branches" + getBranch)).mkString)
+    }
+    newCommit
+
     //WARNING add the date ?
   }
 

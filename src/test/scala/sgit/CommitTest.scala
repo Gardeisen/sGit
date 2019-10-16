@@ -3,6 +3,7 @@ package sgit
 import java.io.File
 
 import org.scalatest._
+import sgit.Commit.{commit, createListByLength, createMapFromList, createMapIndex, createTableOfPath, createTree, createTreeFromMap, createTreesFromIndex, cutLineByLength, deepLengthMax, getBranch, getLengthOfElement}
 import sgit.UtilityGit.{getContent, sha1Transformation}
 
 import scala.reflect.io.Directory
@@ -21,7 +22,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
     //TEST FOR THE "deepLengthMax" FUNCTION
     describe("If I want the deepest length") {
       it("Should give 3 as result") {
-        assert(Commit.deepLengthMax(list) === 3)
+        assert(deepLengthMax(list) === 3)
       }
     }
   }
@@ -34,7 +35,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         Init.init()
         Add.add(Seq[File](new File(path + "/README.md")))
         val index = new File(path + "/.sgit/INDEX")
-        val tablePath = Commit.createTableOfPath(index)
+        val tablePath = createTableOfPath(index)
         tablePath.isEmpty shouldBe false
         tablePath.length shouldBe 1
         tablePath.apply(0) shouldBe "README.md"
@@ -47,7 +48,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         Init.init()
         Add.add(Seq[File](new File(path + "/README.md")))
         val index = new File(path + "/.sgit/INDEX")
-        val mapIndex = Commit.createMapIndex(index)
+        val mapIndex = createMapIndex(index)
         mapIndex.knownSize shouldBe 1
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
@@ -57,7 +58,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         val readme = new File(path + "/README.md")
         Add.add(Seq[File](readme))
         val index = new File(path + "/.sgit/INDEX")
-        val mapIndex = Commit.createMapIndex(index)
+        val mapIndex = createMapIndex(index)
 
         mapIndex("README.md") shouldBe UtilityGit.sha1Transformation(UtilityGit.getContent(readme).mkString("\n"))
 
@@ -70,13 +71,13 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   describe("When I call the function getLengthOfElement for a String") {
 
     it("should return 0 for an empty String ") {
-      Commit.getLengthOfElement("") shouldBe 0
+      getLengthOfElement("") shouldBe 0
     }
     it("Should return 1 for the following string") {
-      Commit.getLengthOfElement("marine") shouldBe 1
+      getLengthOfElement("marine") shouldBe 1
     }
     it("should return 4 for the following String") {
-      Commit.getLengthOfElement("marine\\gardeisen\\mathieu\\4") shouldBe 4
+      getLengthOfElement("marine\\gardeisen\\mathieu\\4") shouldBe 4
     }
 
   }
@@ -84,11 +85,11 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   //TESTS FOR function cutLineByLength
   describe("When I call the function cutLineByLength for the string  marine\\gardeisen\\mathieu\\4 ") {
     it("Should return /marine/gardeisen for size 2") {
-      Commit.getLengthOfElement("marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
-      Commit.cutLineByLength("marine\\gardeisen\\mathieu\\4", 2) shouldBe "marine\\gardeisen"
+      getLengthOfElement("marine\\gardeisen\\mathieu\\4") > 2 shouldBe true
+      cutLineByLength("marine\\gardeisen\\mathieu\\4", 2) shouldBe "marine\\gardeisen"
     }
     it("Should return /marine/gardeisen/mathieu/4 for size 4") {
-      Commit.cutLineByLength("marine\\gardeisen\\mathieu\\4", 4) shouldBe "marine\\gardeisen\\mathieu\\4"
+      cutLineByLength("marine\\gardeisen\\mathieu\\4", 4) shouldBe "marine\\gardeisen\\mathieu\\4"
     }
   }
 
@@ -96,17 +97,17 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   describe("When I call the createListByLength function on this list (marine/4,mathieu/gardeisen/5,6) ") {
     val list = List("marine\\4", "mathieu\\gardeisen\\5", "6")
     it("Should return List(marine/4,mathieu/gardeisen) for size 2") {
-      Commit.createListByLength(list, 2).apply(0) shouldBe "marine\\4"
-      Commit.createListByLength(list, 2).apply(1) shouldBe "mathieu\\gardeisen"
+      createListByLength(list, 2).apply(0) shouldBe "marine\\4"
+      createListByLength(list, 2).apply(1) shouldBe "mathieu\\gardeisen"
     }
     it("Should return List(mathieu/gardeisen/5) for size 3") {
-      Commit.createListByLength(list, 3).apply(0) shouldBe "mathieu\\gardeisen\\5"
+      createListByLength(list, 3).apply(0) shouldBe "mathieu\\gardeisen\\5"
     }
     it("Should return List(marine,mathieu,6) for size 1") {
-      Commit.createListByLength(list, 1).apply(0) shouldBe "marine"
-      Commit.createListByLength(list, 1).apply(1) shouldBe "mathieu"
-      Commit.getLengthOfElement(list.apply(2)) shouldBe 1
-      Commit.createListByLength(list, 1).apply(2) shouldBe "6"
+      createListByLength(list, 1).apply(0) shouldBe "marine"
+      createListByLength(list, 1).apply(1) shouldBe "mathieu"
+      getLengthOfElement(list.apply(2)) shouldBe 1
+      createListByLength(list, 1).apply(2) shouldBe "6"
     }
 
   }
@@ -116,17 +117,17 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
     val list = List("marine\\4", "mathieu\\gardeisen\\5", "6")
 
     it("Should for size 2 return the map : /marine -> 4 , /mathieu -> gardeisen") {
-      Commit.createMapFromList(list, 2)("marine").apply(0) shouldBe "marine\\4"
-      Commit.createMapFromList(list, 2)("mathieu").apply(0) shouldBe "mathieu\\gardeisen"
+      createMapFromList(list, 2)("marine").apply(0) shouldBe "marine\\4"
+      createMapFromList(list, 2)("mathieu").apply(0) shouldBe "mathieu\\gardeisen"
     }
 
     it("Should for size 1 return the map :   -> marine,mathieu,6 ") {
-      Commit.createMapFromList(list, 1)(" ").apply(0) shouldBe "marine"
-      Commit.createMapFromList(list, 1)(" ").apply(1) shouldBe "mathieu"
-      Commit.createMapFromList(list, 1)(" ").apply(2) shouldBe "6"
+      createMapFromList(list, 1)(" ").apply(0) shouldBe "marine"
+      createMapFromList(list, 1)(" ").apply(1) shouldBe "mathieu"
+      createMapFromList(list, 1)(" ").apply(2) shouldBe "6"
     }
     it("Should for size 3 return the map : mathieu/gardeisen -> mathieu/gardeisen/5 ") {
-      Commit.createMapFromList(list, 3)("mathieu\\gardeisen").apply(0) shouldBe "mathieu\\gardeisen\\5"
+      createMapFromList(list, 3)("mathieu\\gardeisen").apply(0) shouldBe "mathieu\\gardeisen\\5"
     }
   }
 
@@ -138,7 +139,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       Add.add(Seq[File](add, init))
-      Commit.createTree(List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit").exists() shouldBe true
+      createTree(List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit").exists() shouldBe true
     }
     it("Should contains the different blob and their hash ") {
       Init.init()
@@ -146,7 +147,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       Add.add(Seq[File](add, init))
       getContent(
-        Commit.createTree(
+        createTree(
           List("src\\main\\scala\\sgit\\Init.scala", "src\\main\\scala\\sgit\\Add.scala"), "src\\main\\scala\\sgit")
       ).mkString("\n").contains("src\\main\\scala\\sgit\\Init.scala") shouldBe true
     }
@@ -156,7 +157,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       Add.add(Seq[File](add))
       getContent(
-        Commit.createTree(
+        createTree(
           List("src\\main\\scala\\sgit"), "src\\main\\scala")
       ).mkString("\n") shouldBe "tree src\\main\\scala\\sgit " + sha1Transformation("src\\main\\scala\\sgit")
     }
@@ -173,7 +174,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       Add.add(Seq[File](add, init))
       val map = Map("src\\main\\scala\\sgit" -> List("src\\main\\scala\\sgit\\Add.scala", "src\\main\\scala\\sgit\\Init.scala"))
-      Commit.createTreeFromMap(map)
+      createTreeFromMap(map)
       new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
 
       new Directory(new File(path + "/.sgit")).deleteRecursively()
@@ -188,7 +189,7 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       val readme = new File(path + "/README.md")
       Add.add(Seq[File](add, init, readme))
-      Commit.createTreesFromIndex()
+      createTreesFromIndex()
 
       new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
       new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala")).exists() shouldBe true
@@ -213,9 +214,27 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       val readme = new File(path + "/README.md")
       Add.add(Seq[File](add, init, readme))
-      Commit.commit().exists() shouldBe true
+      commit().exists() shouldBe true
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
+    it("Should write in the actual branch file the new commit"){
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      val readme = new File(path + "/README.md")
+      Add.add(Seq[File](add, init, readme))
+      val commit = Commit.commit()
+      getContent(new File(path+"/.sgit/branches"+getBranch)).mkString shouldBe commit.getName
       new Directory(new File(path + "/.sgit")).deleteRecursively()
     }
   }
 
+  //TEST for function getBranch
+  describe("When I use de function get Branch "){
+    it("Should return master"){
+      Init.init()
+      getBranch shouldBe "/master"
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
+  }
 }

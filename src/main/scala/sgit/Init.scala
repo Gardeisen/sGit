@@ -19,7 +19,7 @@ object Init {
       new File(System.getProperty("user.dir") + "/.sgit/objects").mkdirs()
       new File(System.getProperty("user.dir") + "/.sgit/objects/blobs").mkdirs()
       new File(System.getProperty("user.dir") + "/.sgit/objects/trees").mkdirs()
-      new File(System.getProperty("user.dir") + "/.sgit/objects/commits").mkdirs()
+      //new File(System.getProperty("user.dir") + "/.sgit/objects/commits").mkdirs()
       //folder .sgit/logs : create later with first commit
       //new File(System.getProperty("user.dir") + "/.sgit/logs").mkdir()
       //folder .sgit/branches
