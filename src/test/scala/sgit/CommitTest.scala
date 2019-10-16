@@ -111,8 +111,22 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   }
 
   //TESTS FOR function createMapFromList
-  describe("???") {
-    //it("")
+  describe("When I call the function createMapFromList on this list (marine/4,mathieu/gardeisen/5,6) ") {
+    val list = List("\\marine\\4", "\\mathieu\\gardeisen\\5", "\\6")
+
+    it("Should for size 2 return the map : /marine -> 4 , /mathieu -> gardeisen"){
+      Commit.createMapFromList(list,2)("\\marine").apply(0) shouldBe "\\marine\\4"
+      Commit.createMapFromList(list,2)("\\mathieu").apply(0) shouldBe "\\mathieu\\gardeisen"
+    }
+
+    it("Should for size 1 return the map :   -> marine,mathieu,6 "){
+      Commit.createMapFromList(list,1)(" ").apply(0) shouldBe "\\marine"
+      Commit.createMapFromList(list,1)(" ").apply(1) shouldBe "\\mathieu"
+      Commit.createMapFromList(list,1)(" ").apply(2) shouldBe "\\6"
+    }
+    it("Should for size 3 return the map : mathieu/gardeisen -> mathieu/gardeisen/5 "){
+      Commit.createMapFromList(list,3)("\\mathieu\\gardeisen").apply(0) shouldBe "\\mathieu\\gardeisen\\5"
+    }
   }
 
   //TESTS FOR THE COMMIT

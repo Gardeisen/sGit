@@ -114,7 +114,7 @@ object Commit {
    * @return the map
    */
   def createMapFromList(list: List[String], length: Int): Map[String, List[String]] = {
-    list.groupMap(line => cutLineByLength(line, length - 1))(line => line)
+    list.groupMap(line => cutLineByLength(line, length - 1))(line => cutLineByLength(line,length))
   }
 
   /**
