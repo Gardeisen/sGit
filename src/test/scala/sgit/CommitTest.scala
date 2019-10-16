@@ -172,18 +172,50 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       Add.add(Seq[File](add, init))
-      val map = Map("src\\main\\scala\\sgit"->List("src\\main\\scala\\sgit\\Add.scala","src\\main\\scala\\sgit\\Init.scala"))
+      val map = Map("src\\main\\scala\\sgit" -> List("src\\main\\scala\\sgit\\Add.scala", "src\\main\\scala\\sgit\\Init.scala"))
       Commit.createTreeFromMap(map)
-      new File(path+ "/.sgit/objects/trees/"+sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
 
       new Directory(new File(path + "/.sgit")).deleteRecursively()
     }
   }
 
-  //TESTS FOR function
-  describe("TODO") {
-    //it("")
-    //TODO
+  //TESTS FOR function createTreesFromIndex
+  describe("When I run the function createTreesFromIndex") {
+    it("Should create a tree root, scr,main,scala,sgit") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      val readme = new File(path + "/README.md")
+      Add.add(Seq[File](add, init, readme))
+      Commit.createTreesFromIndex()
+
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala")).exists() shouldBe true
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main")).exists() shouldBe true
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation("src")).exists() shouldBe true
+      new File(path + "/.sgit/objects/trees/" + sha1Transformation(" ")).exists() shouldBe true
+
+      getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala"))).mkString("\n").contains(sha1Transformation("src\\main\\scala\\sgit")) shouldBe true
+      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala"))).mkString("\n") shouldBe "test"
+      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main"))).mkString("\n") shouldBe "test"
+      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src"))).mkString("\n") shouldBe "test"
+      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation(" "))).mkString("\n") shouldBe "test"
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
+  }
+
+  //TEST for function commit
+  describe("When I run the function commit") {
+    it("Should create an object commit in the right place") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      val readme = new File(path + "/README.md")
+      Add.add(Seq[File](add, init, readme))
+      Commit.commit().exists() shouldBe true
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
   }
 
 }

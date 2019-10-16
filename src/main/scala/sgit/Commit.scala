@@ -174,7 +174,6 @@ object Commit {
         createTreesFromIndexRec(length - 1, createTreeFromMap(createMapFromList(listIndex, length)))
       }
     }
-
     createTreesFromIndexRec(deepLengthMax(listIndex))
   }
 
