@@ -36,7 +36,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       it("Should create a file content the same content of the fileTest.txt") {
         Add.createBlob(fileTest)
         val sha = sha1Transformation(getContent(fileTest).mkString("\n"))
-        getContent(new File(path + "/.sgit/objects/blobs/" + sha)) shouldBe "test"
+        getContent(new File(path + "/.sgit/objects/blobs/" + sha)).mkString("\n") shouldBe "test"
       }
     }
 
@@ -49,7 +49,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       it("Should add to a file INDEX a line : fileTest.txt and the blob associate") {
         Add.addOneFile(fileTest)
         val index = new File(path + "/.sgit/INDEX")
-        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
+        getContent(index).mkString("\n").contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
       }
 
     }
@@ -64,7 +64,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       it("Should transform the line in the index with the new blob") {
         Add.addOneFile(fileTest)
         val index = new File(path + "/.sgit/INDEX")
-        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
+        getContent(index).mkString("\n").contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
       }
     }
 
@@ -75,8 +75,8 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
         writeInAFile(fileTestTwo, "testTwo")
         Add.add(Seq[File](fileTest,fileTestTwo))
         val index = new File(path + "/.sgit/INDEX")
-        getContent(index).contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
-        getContent(index).contains("fileTestTwo.txt " + sha1Transformation(getContent(fileTestTwo).mkString("\n"))) shouldBe true
+        getContent(index).mkString("\n").contains("fileTest.txt " + sha1Transformation(getContent(fileTest).mkString("\n"))) shouldBe true
+        getContent(index).mkString("\n")contains("fileTestTwo.txt " + sha1Transformation(getContent(fileTestTwo).mkString("\n"))) shouldBe true
         fileTestTwo.delete()
         fileTest.delete()
       }

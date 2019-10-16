@@ -7,7 +7,7 @@ import org.scalatest._
 import scala.reflect.io.Directory
 
 //TESTS FOR THE FUNCTION OF TRANSFORMATION
-class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
+class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAfter {
 
   val path = System.getProperty("user.dir")
 
@@ -36,49 +36,32 @@ class commitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
         val tablePath = Commit.createTableOfPath(index)
         tablePath.isEmpty shouldBe false
         tablePath.length shouldBe 1
-        new Directory(new File(path + "/.sgit")).deleteRecursively()
-      }
-
-      it("Should put src in the first element of the first array") {
-        Init.init()
-        Add.add(Seq[File](new File(path+"/src/main/scala/sgit/Add.scala")))
-        val index = new File(path + "/.sgit/INDEX")
-        val tablePath = Commit.createTableOfPath(index)
-        tablePath.apply(0).apply(0) shouldBe "src"
-        new Directory(new File(path + "/.sgit")).deleteRecursively()
-      }
-      it("Should put sgit in the fourth element of the first array") {
-        Init.init()
-        Add.add(Seq[File](new File(path+"/src/main/scala/sgit/Add.scala")))
-        val index = new File(path + "/.sgit/INDEX")
-        val tablePath = Commit.createTableOfPath(index)
-        tablePath.apply(0).apply(3) shouldBe "sgit"
-
+        tablePath.apply(0) shouldBe "\\README.md"
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
     }
     //TEST FOR THE "createMapIndex" FUNCTION
-    /*describe("I want to get the map which associate the index to the ref blob") {
-      it("Should give a map with two keys") {
+    describe("I want to get the map which associate the index to the ref blob") {
+      it("Should give a map with one keys") {
         Init.init()
-        Add.add(Seq[File](new File(path+path+"/README.md")))
+        Add.add(Seq[File](new File(path+"/README.md")))
         val index = new File(path + "/.sgit/INDEX")
         val mapIndex = Commit.createMapIndex(index)
-        mapIndex.knownSize shouldBe 2
-
+        mapIndex.knownSize shouldBe 1
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
+
       it("Should return good value (the hash) for the key README.md") {
         Init.init()
         val readme = new File(path+"/README.md")
         Add.add(Seq[File](readme))
         val index = new File(path + "/.sgit/INDEX")
         val mapIndex = Commit.createMapIndex(index)
-        mapIndex.get("/README.md") shouldBe sha1Transformation(getContent(readme))
+        //mapIndex.get("/README.md") shouldBe UtilityGit.getContent(index).mkString("\n")
 
         new Directory(new File(path + "/.sgit")).deleteRecursively()
       }
-    }*/
+    }
   }
 
   //TESTS FOR THE COMMIT
