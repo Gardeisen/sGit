@@ -6,6 +6,7 @@ import sgit.UtilityGit._
 
 import scala.annotation.tailrec
 import scala.io.Source
+import scala.reflect.io.Directory
 
 object Commit {
 
@@ -121,13 +122,13 @@ object Commit {
    * function create tree
    *
    * @param children    the folder or the file under the element study
-   * @param hisPath     the name of the tree before hash
+   * @param hisName     the name of the tree before hash
    * @param pathToWrite the location where the file will be write
    * @return a file correspond to the tree
    */
-  def createTree(children: List[String], hisPath: String, pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/trees/"): File = {
+  def createTree(children: List[String], hisName: String, pathToWrite: String = System.getProperty("user.dir") + "/.sgit/objects/trees/"): File = {
 
-    val tree = new File(pathToWrite + sha1Transformation(hisPath))
+    val tree = new File(pathToWrite + sha1Transformation(hisName))
     if (!tree.exists()) {
       tree.createNewFile()
       writeInAFile(tree,
@@ -161,8 +162,7 @@ object Commit {
    *
    * @return the last tree build
    */
-  def createTreesFromIndex(): File = {
-    val index = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
+  def createTreesFromIndex(index: File): File = {
     val listIndex = createTableOfPath(index)
 
     @tailrec
@@ -194,28 +194,30 @@ object Commit {
    * @return the file correspond to the commit
    */
   def commit(): File = {
-    val lastTree = createTreesFromIndex()
+
+    val index = new File(System.getProperty("user.dir") + "/.sgit/INDEX")
+    val lastTree = createTreesFromIndex(index)
     val content = getContent(lastTree).mkString("\n")
     val newCommit = new File(System.getProperty("user.dir") + "/.sgit/objects/commits/" + sha1Transformation(content))
+    //check if it's the first commit
+    if (!new Directory(new File(System.getProperty("user.dir") + "/.sgit/objects/commits")).exists) {
+      new File(System.getProperty("user.dir") + "/.sgit/objects/commits").mkdirs()
+      newCommit.createNewFile()
+      writeInAFile(newCommit, content + "\\n")
+    }
+    else if (new Directory(new File(System.getProperty("user.dir") + "/.sgit/objects/commits")).exists) {
+      newCommit.createNewFile()
+      writeInAFile(newCommit, content)
+      //Don't forget to add him a parent
+      writeInAFile(newCommit, "parent " + getContent(new File(System.getProperty("user.dir") + "/.sgit/branches" + getBranch)).mkString)
+    }
 
     //write the last commit in the branch
     val branches = new File(System.getProperty("user.dir") + "/.sgit/branches" + getBranch)
     val fileWriter = new FileWriter(branches, false)
-    fileWriter.write(sha1Transformation(content) + "\n")
+    fileWriter.write(newCommit.getName)
     fileWriter.close()
 
-    //check if it's the first commit
-    if (!new File(System.getProperty("user.dir") + "/.sgit/objects/commits").exists()) {
-      new File(System.getProperty("user.dir") + "/.sgit/objects/commits").mkdirs()
-      newCommit.createNewFile()
-      writeInAFile(newCommit, content)
-    }
-    else {
-      newCommit.createNewFile()
-      writeInAFile(newCommit, content)
-      //Don't forget to get him a parent
-      writeInAFile(newCommit, "parent " + getContent(new File(System.getProperty("user.dir") + "/.sgit/branches" + getBranch)).mkString)
-    }
     newCommit
 
     //WARNING add the date ?

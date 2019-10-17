@@ -185,11 +185,12 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
   describe("When I run the function createTreesFromIndex") {
     it("Should create a tree root, scr,main,scala,sgit") {
       Init.init()
+      val index = new File(path + "/.sgit/INDEX")
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       val readme = new File(path + "/README.md")
       Add.add(Seq[File](add, init, readme))
-      createTreesFromIndex()
+      createTreesFromIndex(index)
 
       new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala\\sgit")).exists() shouldBe true
       new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala")).exists() shouldBe true
@@ -198,10 +199,6 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       new File(path + "/.sgit/objects/trees/" + sha1Transformation(" ")).exists() shouldBe true
 
       getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala"))).mkString("\n").contains(sha1Transformation("src\\main\\scala\\sgit")) shouldBe true
-      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main\\scala"))).mkString("\n") shouldBe "test"
-      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src\\main"))).mkString("\n") shouldBe "test"
-      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation("src"))).mkString("\n") shouldBe "test"
-      //getContent(new File(path + "/.sgit/objects/trees/" + sha1Transformation(" "))).mkString("\n") shouldBe "test"
       new Directory(new File(path + "/.sgit")).deleteRecursively()
     }
   }
@@ -217,21 +214,35 @@ class CommitTest extends FunSpec with Matchers with GivenWhenThen with BeforeAnd
       commit().exists() shouldBe true
       new Directory(new File(path + "/.sgit")).deleteRecursively()
     }
-    it("Should write in the actual branch file the new commit"){
+    it("Should write in the actual branch file the new commit") {
       Init.init()
       val add = new File(path + "/src/main/scala/sgit/Add.scala")
       val init = new File(path + "/src/main/scala/sgit/Init.scala")
       val readme = new File(path + "/README.md")
       Add.add(Seq[File](add, init, readme))
       val commit = Commit.commit()
-      getContent(new File(path+"/.sgit/branches"+getBranch)).mkString shouldBe commit.getName
+      getContent(new File(path + "/.sgit/branches" + getBranch)).mkString shouldBe commit.getName
+      new Directory(new File(path + "/.sgit")).deleteRecursively()
+    }
+    it("Should write an other commit with a parent if it's not the first commit") {
+      Init.init()
+      val add = new File(path + "/src/main/scala/sgit/Add.scala")
+      val init = new File(path + "/src/main/scala/sgit/Init.scala")
+      Add.add(Seq[File](add, init))
+      val firstCommit = Commit.commit()
+      val readme = new File(path + "/README.md")
+      Add.add(Seq[File](readme))
+      val secondCommit = Commit.commit()
+      getContent(new File(path + "/.sgit/branches" + getBranch)).mkString shouldBe secondCommit.getName
+      new File(path + "/.sgit/commits/" + secondCommit.getName).exists() shouldBe true
+      //getContent(new File(path + "/.sgit/commits/" + secondCommit.getName)).mkString.contains(firstCommit.getName) shouldBe true
       new Directory(new File(path + "/.sgit")).deleteRecursively()
     }
   }
 
   //TEST for function getBranch
-  describe("When I use de function get Branch "){
-    it("Should return master"){
+  describe("When I use de function get Branch ") {
+    it("Should return master") {
       Init.init()
       getBranch shouldBe "/master"
       new Directory(new File(path + "/.sgit")).deleteRecursively()

@@ -62,12 +62,14 @@ object Parseur extends App {
         // case "add" => //pour tous les fichier add .
         //to do
 
-
         case "commit" =>
           Commit.commit()
 
         case _ =>
           println("there's no command like this, try again")
       }
+    case None => {
+      println("there's no command like this, try again")
+  }
   }
 }
