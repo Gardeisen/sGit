@@ -52,21 +52,25 @@ object Parseur extends App {
   // OParser.parse returns Option[sgit.Config]
   OParser.parse(parser1, args, Config()) match {
     case Some(config) =>
-      config.mode match {
-        case "init" =>
-          Init.init()
+      if (!config.mode.equals("init") && !new File(System.getProperty("user.dir") + "/.sgit").exists()) {
+        config.mode match {
+          case "init" =>
+            Init.init()
 
-        case "add" =>
-          Add.add(config.files)
+          case "add" =>
+            Add.add(config.files)
 
-        // case "add" => //pour tous les fichier add .
-        //to do
+          // case "add" => //pour tous les fichier add .
+          //to do
 
-        case "commit" =>
-          Commit.commit()
+          case "commit" =>
+            Commit.commit()
 
-        case _ =>
-          println("there's no command like this, try again")
+          case _ =>
+            println("there's no command like this, try again")
+        }
+      } else {
+        println("The repository isn't initialised ")
       }
     case None => {
       println("there's no command like this, try again")
