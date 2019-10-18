@@ -53,6 +53,10 @@ object Parseur extends App {
   OParser.parse(parser1, args, Config()) match {
     case Some(config) =>
       if (!config.mode.equals("init") && !new File(System.getProperty("user.dir") + "/.sgit").exists()) {
+
+        println("The repository isn't initialised ")
+
+      } else {
         config.mode match {
           case "init" =>
             Init.init()
@@ -69,11 +73,9 @@ object Parseur extends App {
           case _ =>
             println("there's no command like this, try again")
         }
-      } else {
-        println("The repository isn't initialised ")
       }
     case None => {
       println("there's no command like this, try again")
-  }
+    }
   }
 }

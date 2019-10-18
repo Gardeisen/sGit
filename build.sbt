@@ -11,3 +11,6 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 parallelExecution in Test := false
 
 libraryDependencies += "org.mockito" %% "mockito-scala" % "1.5.18"
+
+lazy val sgit = (project in file("."))
+  .enablePlugins(JavaAppPackaging)

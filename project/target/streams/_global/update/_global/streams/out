@@ -1,3 +1,4 @@
 [debug] "not up to date. inChanged = false, force = false
 [debug] Updating ProjectRef(uri("file:/C:/Users/Marine_2/IdeaProjects/sGit/project/"), "sgit-build")...
 [debug] Done updating ProjectRef(uri("file:/C:/Users/Marine_2/IdeaProjects/sGit/project/"), "sgit-build")
+[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
