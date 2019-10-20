@@ -53,6 +53,7 @@ class AddTest extends FunSpec with Matchers with GivenWhenThen with BeforeAndAft
       }
 
     }
+
     describe("Run the function add for  fileTest.txt which have been modified") {
       writeInAFile(fileTest, "something more")
       it("Should create a new blob") {
